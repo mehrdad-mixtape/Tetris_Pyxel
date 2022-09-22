@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Union, List, Dict
+from typing import Any, Tuple, Union, List
 from collections import deque
 from enum import Enum
 
@@ -10,6 +10,7 @@ RED = (0, 24)
 PURPLE = (8, 24)
 CHESS = (104, 32)
 DEAD = (0, 16)
+CLEAR = (8, 16)
 
 class Direction(Enum):
     RightTurn = 1
@@ -42,15 +43,15 @@ class Cycle:
 
 class Block:
     """ Display of Tetris filled with Blocks """
-    __slots__ = 'asset', 'fill'
-    def __init__(self, asset: Tuple[int]=YELLOW, fill: int=0):
-        self.asset = asset
+    __slots__ = 'style', 'fill'
+    def __init__(self, style: Tuple[int]=YELLOW, fill: int=0):
+        self.style = style
         self.fill = fill
 
 class Base_piece:
     """ Father of All-Pieces, All rotations of pieces store on 'Cycle' data-structure """
     __slots__ = 'limit_h', 'limit_w', 'x', 'y', 'limit_x', \
-        'limit_y', 'current_rotation', 'pool_piece', 'asset'
+        'limit_y', 'current_rotation', 'pool_piece', 'style'
     def __init__(self):
         self.limit_h = 0 # height of piece
         self.limit_w = 0 # width of piece
@@ -60,7 +61,7 @@ class Base_piece:
         self.limit_y = 0 # maximum loc_y value that the piece can have on Display.
         self.current_rotation: Tuple[Tuple[str]] = None
         self.pool_piece: Cycle = Cycle() # store all rotations of piece
-        self.asset: Tuple[int] = (0, 0)
+        self.style: Tuple[int] = (0, 0)
 
     def rotate(self) -> None:
         self.current_rotation = self.pool_piece.nexT()
@@ -73,7 +74,7 @@ class Piece_L(Base_piece):
     __slots__ = '_piece_01', '_piece_02', '_piece_03', '_piece_04'
     def __init__(self):
         super().__init__()
-        self.asset = (8, 0)
+        self.style = (8, 0)
         self._piece_01 = (
             (1, 1, 1,),
             (1, 0, 0,),
@@ -115,7 +116,7 @@ class Piece_J(Base_piece):
     __slots__ = '_piece_11', '_piece_12', '_piece_13', '_piece_14'
     def __init__(self):
         super().__init__()
-        self.asset = (24, 8)
+        self.style = (24, 8)
         self._piece_11 = (
             (1, 0, 0,),
             (1, 1, 1,),
@@ -157,7 +158,7 @@ class Piece_I(Base_piece):
     __slots__ = '_piece_21', '_piece_22', '__allowed'
     def __init__(self):
         super().__init__()
-        self.asset = (24, 0)
+        self.style = (24, 0)
         self._piece_21 = (
             (1,),
             (1,),
@@ -189,7 +190,7 @@ class Piece_S(Base_piece):
     __slots__ = '_piece_31', '_piece_32'
     def __init__(self):
         super().__init__()
-        self.asset = (8, 8)
+        self.style = (8, 8)
         self._piece_31 = (
             (1, 0,),
             (1, 1,),
@@ -220,7 +221,7 @@ class Piece_Z(Base_piece):
     __slots__ = '_piece_41', '_piece_42'
     def __init__(self):
         super().__init__()
-        self.asset = (0, 8)
+        self.style = (0, 8)
         self._piece_41 = (
             (0, 1,),
             (1, 1,),
@@ -251,7 +252,7 @@ class Piece_T(Base_piece):
     __slots__ = '_piece_51', '_piece_52', '_piece_53', '_piece_54'
     def __init__(self):
         super().__init__()
-        self.asset = (16, 0)
+        self.style = (16, 0)
         self._piece_51 = (
             (0, 1, 0,),
             (1, 1, 1,),
@@ -293,7 +294,7 @@ class Piece_O(Base_piece):
     __slots__ = '_piece_61'
     def __init__(self):
         super().__init__()
-        self.asset = (16, 8)
+        self.style = (16, 8)
         self._piece_61 = (
             (1, 1,),
             (1, 1,),
