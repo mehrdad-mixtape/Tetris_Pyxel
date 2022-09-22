@@ -6,12 +6,18 @@ BLUE = (16, 16)
 PINK = (24, 16)
 YELLOW = (32, 16)
 CYAN = (80, 0)
+RED = (0, 24)
+PURPLE = (8, 24)
+CHESS = (104, 32)
+DEAD = (0, 16)
 
 class Direction(Enum):
     RightTurn = 1
     LeftTurn = -1
 
 class Cycle:
+    """ Cycle data structure """
+    __slots__ = '__index', '__cycle', '__len'
     def __init__(self, *args):
         self.__index = 0
         self.__cycle: List[Any] = [*args]
@@ -36,12 +42,15 @@ class Cycle:
 
 class Block:
     """ Display of Tetris filled with Blocks """
+    __slots__ = 'asset', 'fill'
     def __init__(self, asset: Tuple[int]=YELLOW, fill: int=0):
         self.asset = asset
         self.fill = fill
 
 class Base_piece:
-    """ Father of All-Pieces, All rotations of pieces store on 'cycle' data-structure """
+    """ Father of All-Pieces, All rotations of pieces store on 'Cycle' data-structure """
+    __slots__ = 'limit_h', 'limit_w', 'x', 'y', 'limit_x', \
+        'limit_y', 'current_rotation', 'pool_piece', 'asset'
     def __init__(self):
         self.limit_h = 0 # height of piece
         self.limit_w = 0 # width of piece
@@ -61,6 +70,7 @@ class Base_piece:
 
 class Piece_L(Base_piece):
     """ Piece L with 4 rotation """
+    __slots__ = '_piece_01', '_piece_02', '_piece_03', '_piece_04'
     def __init__(self):
         super().__init__()
         self.asset = (8, 0)
@@ -102,6 +112,7 @@ class Piece_L(Base_piece):
 
 class Piece_J(Base_piece):
     """ Piece J with 4 rotation """
+    __slots__ = '_piece_11', '_piece_12', '_piece_13', '_piece_14'
     def __init__(self):
         super().__init__()
         self.asset = (24, 8)
@@ -143,6 +154,7 @@ class Piece_J(Base_piece):
 
 class Piece_I(Base_piece):
     """ Piece I with 2 rotation """
+    __slots__ = '_piece_21', '_piece_22', '__allowed'
     def __init__(self):
         super().__init__()
         self.asset = (24, 0)
@@ -174,6 +186,7 @@ class Piece_I(Base_piece):
 
 class Piece_S(Base_piece):
     """ Piece S with 2 rotation """
+    __slots__ = '_piece_31', '_piece_32'
     def __init__(self):
         super().__init__()
         self.asset = (8, 8)
@@ -204,6 +217,7 @@ class Piece_S(Base_piece):
 
 class Piece_Z(Base_piece):
     """ Piece Z with 2 rotation"""
+    __slots__ = '_piece_41', '_piece_42'
     def __init__(self):
         super().__init__()
         self.asset = (0, 8)
@@ -233,7 +247,8 @@ class Piece_Z(Base_piece):
         """
 
 class Piece_T(Base_piece):
-    """ Piece T with 4 rotation"""
+    """ Piece T with 4 rotation """
+    __slots__ = '_piece_51', '_piece_52', '_piece_53', '_piece_54'
     def __init__(self):
         super().__init__()
         self.asset = (16, 0)
@@ -275,6 +290,7 @@ class Piece_T(Base_piece):
 
 class Piece_O(Base_piece):
     """ Piece O with 1 rotation """
+    __slots__ = '_piece_61'
     def __init__(self):
         super().__init__()
         self.asset = (16, 8)
