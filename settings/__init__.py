@@ -45,8 +45,10 @@ GAME_STATE_COLOR = {
     'START': 0,
     'READY': 2,
     'RUNNING': 3,
+    'CLEAR': 4, 
     'GAMEOVER': 8,
     'PAUSE': 9,
     'END': 12
 }
 DEAD_SPEED = 30
+CLEAR_SPEED = 3
