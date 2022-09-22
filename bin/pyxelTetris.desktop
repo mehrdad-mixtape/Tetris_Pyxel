@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=PyxelTetris
-Exec=/home/mehrdad/Documents/Project-py3/Tetris_2_Pyxel/bin/build/pyxelTetris
+Exec=/home/mehrdad/Documents/Project-GIT/Tetris_Pyxel/bin/build/pyxelTetris
 Display=true
 Type=Application
-Icon=/home/mehrdad/Documents/Project-py3/Tetris_2_Pyxel/bin/build/icon.png
+Icon=/home/mehrdad/Documents/Project-GIT/Tetris_Pyxel/bin/build/icon.png
