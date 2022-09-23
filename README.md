@@ -5,7 +5,9 @@
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index.png)
 
 ## Interview:
+### Start:
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index1.png)
+### Ready:
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index2.png)
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index3.png)
 
@@ -39,8 +41,11 @@
     ```
 
 ## Game:
+### Pause:
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index4.png)
+### Running:
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index5.png)
+### Gameover:
 ![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index6.png)
 
 ## Issus:
