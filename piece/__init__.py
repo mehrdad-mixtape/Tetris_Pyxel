@@ -2,7 +2,7 @@ from typing import Any, Tuple, Union, List
 from collections import deque
 from enum import Enum
 
-BLUE = (16, 16)
+BLUE = (16, 24)
 PINK = (24, 16)
 YELLOW = (32, 16)
 CYAN = (80, 0)
