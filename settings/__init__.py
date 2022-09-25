@@ -1,7 +1,7 @@
 PYTHON_VERSION = '310'
 WIDTH = 176
 HEIGHT = 240
-SCALE = 32
+SCALE = 16
 FPS = 12 # Don't Change it! if you increase FPS, keyboard-inputs caching will be so fast
 GAME_NAME = 'Pyxel TETRIS'
 MAX_LEN_Q = 3
@@ -52,3 +52,12 @@ GAME_STATE_COLOR = {
 }
 DEAD_SPEED = 30
 CLEAR_SPEED = 3
+Clear_LOC = [
+    (4, 5),
+    (3, 4, 5, 6),
+    (2, 3, 4, 5, 6, 7),
+    (1, 2, 3, 4, 5, 6, 7, 8),
+    (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+    (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+]
+LevelUp_LOC = [1, 2, 3]
