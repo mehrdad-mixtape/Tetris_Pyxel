@@ -15,6 +15,7 @@ __version__ = 'v1.8.6'
 
 import pyxel, sys
 from enum import Enum
+from functools import lru_cache
 from time import time
 from typing import Any, Callable, List, Tuple
 from random import choice
@@ -225,7 +226,10 @@ class Display:
     def draw_game_over(self) -> None:
         self.draw_text(text='GAME OVER', X=47, Y=58)
         self.draw_text(text='Press Esc to Exit', X=30, Y=74, static=True)
-        self.draw_text(text='Press ENTER to Play', X=27, Y=82, static=True)
+        self.draw_text(text='Press ENTER', X=40, Y=82, static=True)
+        self.draw_text(text='     Or', X=40, Y=92, static=True)
+        self.draw_text(text='Press START', X=40, Y=102, static=True)
+        self.draw_text(text='to Play Again', X=36, Y=112, static=True)
     
     def draw_end(self) -> None:
         self.draw_text(text='End Game!', X=47)
@@ -623,15 +627,18 @@ class Tetris:
                 case Game_state.START:
                     self.current_state = Game_state.READY
                     pyxel.play(0, 10)
-                case Game_state.RUNNING:
-                    self.current_state = Game_state.PAUSE
-                    pyxel.play(0, 0)
-                case Game_state.READY | Game_state.PAUSE:
+                case Game_state.READY:
                     # If Player didn't select level, by default level will be 0
                     if self.display.style == CHESS:
                         self.set_level(level_number=0)
                     self.current_state = Game_state.RUNNING
                     pyxel.play(0, 10)
+                case Game_state.RUNNING:
+                    self.current_state = Game_state.PAUSE
+                    pyxel.play(0, 0)
+                case Game_state.PAUSE:
+                    self.current_state = Game_state.RUNNING
+                    pyxel.play(0, 0)
                 case Game_state.GAMEOVER | Game_state.END:
                     self.new_game()
         
@@ -672,6 +679,13 @@ class Tetris:
         # print(pyxel.mouse_x, pyxel.mouse_y)
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
             match self.current_state:
+                case Game_state.START: 
+                    if ( # Press "Start" button
+                        in_range(192, 199, pyxel.mouse_y)
+                        and in_range(97, 112, pyxel.mouse_x)
+                    ):
+                        self.current_state = Game_state.READY
+                        pyxel.play(0, 10)
                 case Game_state.READY:
                     if in_range(64, 69, pyxel.mouse_y): # Ready display for choose level
                         if in_range(24, 31, pyxel.mouse_x): # Select level 0
@@ -697,17 +711,18 @@ class Tetris:
                     elif ( # Press "Select" button
                         in_range(192, 199, pyxel.mouse_y)
                         and in_range(72, 87, pyxel.mouse_x)
-                    ): 
+                    ):
                         # If Player didn't select level, by default level will be 0
                         if self.display.style == CHESS:
                             self.set_level(level_number=0)
                         self.current_state = Game_state.RUNNING
+                        pyxel.play(0, 10)
 
                 case Game_state.RUNNING: 
                     if ( # Press "Start" button
                         in_range(192, 199, pyxel.mouse_y)
                         and in_range(97, 112, pyxel.mouse_x)
-                    ): 
+                    ):
                         self.current_state = Game_state.PAUSE
                         pyxel.play(0, 0)
                     elif ( # Press "A" button
@@ -747,6 +762,12 @@ class Tetris:
                     ):
                         self.current_state = Game_state.RUNNING
                         pyxel.play(0, 0)
+
+                case Game_state.GAMEOVER | Game_state.END:
+                    if ( # Press "Start" button
+                        in_range(192, 199, pyxel.mouse_y)
+                        and in_range(97, 112, pyxel.mouse_x)
+                    ): self.new_game()
 
 def main() -> None:
     Tetris()
