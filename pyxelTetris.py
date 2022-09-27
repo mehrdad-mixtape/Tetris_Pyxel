@@ -11,9 +11,9 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.8.5'
+__version__ = 'v1.8.6'
 
-import pyxel
+import pyxel, sys
 from enum import Enum
 from time import time
 from typing import Any, Callable, List, Tuple
@@ -26,10 +26,9 @@ W = H = BIT = 8 # length of blocks are 8pixel
 pixel8 = lambda x: x * BIT
 rpixel8 = lambda x: x // BIT
 
-def play_game(cls_game: Any):
+def play_game(cls_game: Callable[[Any], Any]):
     def __runner__() -> None:
         with cls_game() as game:
-            print(dir(game))
             game()
     return __runner__
 
@@ -354,18 +353,18 @@ class Tetris:
     def __dir__(self):
         return [
             'current_state', 'score', 'lines', 'level', 'display', 'speed', 'dont_draw_next_piece',
-            'time_last_frame', 'dt', 'time_since_last_move', '_current_piece', 'is_piece_placed', '__wait',
-            'is_level_up'
+            'time_last_frame', 'dt', 'time_since_last_move', '_current_piece', 'is_piece_placed',
+            '__wait', 'is_level_up'
         ]
-
-    def __del__(self):
-        del self
 
     def __enter__(self):
         return self
     
-    def __exit__(self, *args):
-        del self
+    def __exit__(self, *handlers):
+        try:
+            del self
+        except handlers:
+            sys.exit()
 
     @property    
     def current_piece(self) -> Piece:
