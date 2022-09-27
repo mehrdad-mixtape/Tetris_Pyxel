@@ -11,11 +11,10 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.8.6'
+__version__ = 'v1.8.7'
 
 import pyxel, sys
 from enum import Enum
-from functools import lru_cache
 from time import time
 from typing import Any, Callable, List, Tuple
 from random import choice
