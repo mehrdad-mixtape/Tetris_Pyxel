@@ -4,7 +4,7 @@
     1. sudo update-alternatives --set python3 /usr/bin/python3.8
     2. sudo apt install --reinstall python3-apt
     3. sudo add-apt-repository ppa:deadsnakes/ppa
-    4. sudo apt install python3.10-dbg python3.10-distutils python3.10-dev python3.10-full python3.10-gdbm python3.10-gdbm-dbg python3.10-lib2to3 python3.10-venv 
+    4. sudo apt install python3.10-dbg python3.10-distutils python3.10-dev python3.10-full python3.10-gdbm python3.10-gdbm-dbg python3.10-lib2to3 python3.10-venv ccache
 
 - sudo update-alternatives --set python3 /usr/bin/python3.10
 - source env/bin/activate
