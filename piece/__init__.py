@@ -11,6 +11,7 @@ PURPLE = (8, 24)
 CHESS = (104, 32)
 DEAD = (0, 16)
 CLEAR = (8, 16)
+STONE = (16, 16)
 
 class Direction(Enum):
     RightTurn = 1
