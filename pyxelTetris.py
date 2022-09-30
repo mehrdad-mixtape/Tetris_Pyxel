@@ -128,7 +128,7 @@ class Display:
         self.__pesudo_display: List[List[Block]] = [
             [Block(style=self._main_style) for _ in range(10)] for _ in range(20)
         ]
-        self.__pesudo_display.append([Block(style=CYAN, fill=1) for _ in range(10)])
+        self.__pesudo_display.append([Block(style=STONE, fill=1) for _ in range(10)])
         self.is_full = False
         # Animates:
         self.clear_animate = Clear_animate()
@@ -557,15 +557,12 @@ class Tetris:
         # self.current_piece.limit_x of new piece
         if temp_x > self.current_piece.limit_x:
             if self.current_piece.x - pixel8(3) == self.current_piece.limit_x:
-                print('3')
                 self.current_piece.x -= pixel8(3)
             
             elif self.current_piece.x - pixel8(2) == self.current_piece.limit_x:
-                print('2')
                 self.current_piece.x -= pixel8(2)
 
             elif self.current_piece.x - pixel8(1) == self.current_piece.limit_x:
-                print('1')
                 self.current_piece.x -= pixel8(1)
 
         # 3. If piece closed to other pieces or was between peaces or was between piece and wall:
