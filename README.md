@@ -22,6 +22,10 @@
 
 ## How to Play?
 ### Bin file: (Linux)
+- step 1: requierments
+	1. ```bash
+	sudo apt install g++ build-essential libc6 libc6-dev
+	```
 1. Goto the `./bin/build/`
 2. Run `pyxelTetris`
 
