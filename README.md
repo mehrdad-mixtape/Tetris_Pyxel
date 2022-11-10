@@ -43,6 +43,14 @@
     ```bash
     $ python pyxelTetris.py
     ```
+### WebAssembly:
+1. Go to wasm directory
+2. Run ***run-game-server-PLATFORM*** On Terminal Or Cmd Or PowerShell Or WSL Or etc ...
+3. Open Your Browser & Go to URL --> http://ADDR:PORT & Click On ***game.html*** & Wait For Minutes
+4. Game Will Be Start On Your Browser!
+    - Notice!
+        1. **Chrome Browser** Is Best Choice For Phones
+        2. **FireFox Chrome Brave** Are Best Choice For LapTop Or PCs
 
 ## Game:
 ### Pause:
@@ -58,7 +66,7 @@ I fixed many `Critical Bugs`, But maybe ... :)
 
 ## TODO:
 - [x] **clean code**
-- [ ] **Cross Platform**
+- [x] **Cross Platform**
 - [ ] **sound effects** aren't complete
 - [x] **levels** aren't implemented
 - [x] **comments** aren't complete
