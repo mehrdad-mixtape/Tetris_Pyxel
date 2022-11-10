@@ -11,7 +11,7 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.8.8'
+__version__ = 'v1.9.0'
 
 import pyxel, sys
 from enum import Enum
