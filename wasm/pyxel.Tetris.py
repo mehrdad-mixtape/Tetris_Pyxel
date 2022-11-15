@@ -30,9 +30,9 @@ from collections import deque
 ####### -----------------------------------------
 
 PYTHON_VERSION = '310'
-WIDTH = 176
-HEIGHT = 240
-SCALE = 16
+WIDTH = 22 * 8
+HEIGHT = 32 * 8
+SCALE = 32
 FPS = 12 # Don't Change it! if you increase FPS, keyboard-inputs caching will be so fast
 GAME_NAME = 'Pyxel TETRIS'
 MAX_LEN_Q = 3
@@ -877,7 +877,7 @@ class Tetris:
                     level=self.level
                 )
                 self.is_level_up = NO
-            self.display.draw_text(text='Select Start', X=68, Y=203, static=True, color=1)
+            self.display.draw_text(text='Select Start', X=84, Y=203, static=True, color=1)
             match self.current_state:
                 case Game_state.START:
                     self.display.draw_start()
@@ -1124,8 +1124,8 @@ class Tetris:
             match self.current_state:
                 case Game_state.START: 
                     if ( # Press "Start" button
-                        in_range(192, 199, pyxel.mouse_y)
-                        and in_range(97, 112, pyxel.mouse_x)
+                        in_range(192, 200, pyxel.mouse_y)
+                        and in_range(112, 128, pyxel.mouse_x)
                     ):
                         self.current_state = Game_state.READY
                         pyxel.play(0, 10)
@@ -1152,64 +1152,61 @@ class Tetris:
                         elif in_range(96, 103, pyxel.mouse_x): # Select level 9
                             self.set_level(level_number=9)
                     elif ( # Press "Select" button
-                        in_range(192, 199, pyxel.mouse_y)
-                        and in_range(72, 87, pyxel.mouse_x)
+                        in_range(192, 200, pyxel.mouse_y)
+                        and in_range(88, 104, pyxel.mouse_x)
                     ):
                         # If Player didn't select level, by default level will be 0
                         if self.display.style == CHESS:
                             self.set_level(level_number=0)
                         self.current_state = Game_state.RUNNING
                         pyxel.play(0, 10)
-
                 case Game_state.RUNNING: 
                     if ( # Press "Start" button
-                        in_range(192, 199, pyxel.mouse_y)
-                        and in_range(97, 112, pyxel.mouse_x)
+                        in_range(192, 200, pyxel.mouse_y)
+                        and in_range(112, 128, pyxel.mouse_x)
                     ):
                         self.current_state = Game_state.PAUSE
                         pyxel.play(0, 0)
                     elif ( # Press "A" button
-                        in_range(193, 206, pyxel.mouse_y)
-                        and in_range(145, 157, pyxel.mouse_x)
+                        in_range(200, 224, pyxel.mouse_y)
+                        and in_range(144, 167, pyxel.mouse_x)
                     ): self.handle_rotate(Direction.RightTurn)
                     elif ( # Press "B" button
-                        in_range(209, 222, pyxel.mouse_y)
-                        and in_range(122, 134, pyxel.mouse_x)
+                        in_range(224, 248, pyxel.mouse_y)
+                        and in_range(112, 135, pyxel.mouse_x)
                     ): self.handle_rotate(Direction.LeftTurn)
                     elif ( # Press "D-pad left" button
-                        in_range(201, 214, pyxel.mouse_y)
-                        and in_range(17, 30, pyxel.mouse_x)
+                        in_range(208, 232, pyxel.mouse_y)
+                        and in_range(8, 32, pyxel.mouse_x)
                     ): self.handle_move_left()
                     elif ( # Press "D-pad right" button
-                        in_range(201, 214, pyxel.mouse_y)
-                        and in_range(48, 62, pyxel.mouse_x)
+                        in_range(208, 232, pyxel.mouse_y)
+                        and in_range(56, 80, pyxel.mouse_x)
                     ): self.handle_move_right()
                     elif ( # Press "D-pad down" button
-                        in_range(216, 230, pyxel.mouse_y)
-                        and in_range(33, 46, pyxel.mouse_x)
+                        in_range(230, 254, pyxel.mouse_y)
+                        and in_range(32, 56, pyxel.mouse_x)
                     ): self.handle_move_down()
                     elif ( # Press "D-pad up" button
-                        in_range(185, 199, pyxel.mouse_y)
-                        and in_range(33, 45, pyxel.mouse_x)
+                        in_range(184, 208, pyxel.mouse_y)
+                        and in_range(32, 56, pyxel.mouse_x)
                     ):
                         if self.dont_draw_next_piece == YES:
                             self.dont_draw_next_piece = NO
                         else:
                             self.dont_draw_next_piece = YES
                         pyxel.play(0, 4)
-
                 case Game_state.PAUSE:
                     if ( # Press "Start" button
-                        in_range(192, 199, pyxel.mouse_y)
-                        and in_range(97, 112, pyxel.mouse_x)
+                        in_range(192, 200, pyxel.mouse_y)
+                        and in_range(112, 128, pyxel.mouse_x)
                     ):
                         self.current_state = Game_state.RUNNING
                         pyxel.play(0, 0)
-
                 case Game_state.GAMEOVER | Game_state.END:
                     if ( # Press "Start" button
-                        in_range(192, 199, pyxel.mouse_y)
-                        and in_range(97, 112, pyxel.mouse_x)
+                        in_range(192, 200, pyxel.mouse_y)
+                        and in_range(112, 128, pyxel.mouse_x)
                     ): self.new_game()
 
 def main() -> None:
