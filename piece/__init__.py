@@ -64,11 +64,13 @@ class Base_piece:
         self.pool_piece: Cycle = Cycle() # store all rotations of piece
         self.style: Tuple[int] = (0, 0)
 
-    def rotate(self) -> None:
-        self.current_rotation = self.pool_piece.nexT()
+    def rotate(self, fake: bool=False) -> None:
+        if not fake: self.current_rotation = self.pool_piece.nexT()
+        else: self.pool_piece.nexT()
     
-    def rrotate(self) -> None:
-        self.current_rotation = self.pool_piece.preV()
+    def rrotate(self, fake: bool=False) -> None:
+        if not fake: self.current_rotation = self.pool_piece.preV()
+        else: self.pool_piece.preV()
 
 class Piece_L(Base_piece):
     """ Piece L with 4 rotation """
