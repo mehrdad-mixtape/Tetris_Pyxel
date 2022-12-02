@@ -60,4 +60,7 @@ Clear_LOC = [
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
 ]
-LevelUp_LOC = [1, 2, 3]
+LevelUp_LOC = [1, 2, 3, 4]
+count_down = [
+    loc for loc in ((120, 24), (136, 24), (152, 24), (168, 24)) for _ in range(FPS)
+]
