@@ -11,7 +11,7 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.9.0'
+__version__ = 'v1.10.0'
 
 ####### -----------------------------------------
 ### Libs:
@@ -91,7 +91,10 @@ Clear_LOC = [
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
 ]
-LevelUp_LOC = [1, 2, 3]
+LevelUp_LOC = [1, 2, 3, 4]
+count_down = [
+    loc for loc in ((112, 32), (128, 32), (144, 32), (160, 32)) for _ in range(FPS)
+]
 
 W = H = BIT = 8 # length of blocks are 8pixel
 pixel8 = lambda x: x * BIT
@@ -207,11 +210,13 @@ class Base_piece:
         self.pool_piece: Cycle = Cycle() # store all rotations of piece
         self.style: Tuple[int] = (0, 0)
 
-    def rotate(self) -> None:
-        self.current_rotation = self.pool_piece.nexT()
+    def rotate(self, fake: bool=False) -> None:
+        if not fake: self.current_rotation = self.pool_piece.nexT()
+        else: self.pool_piece.nexT()
     
-    def rrotate(self) -> None:
-        self.current_rotation = self.pool_piece.preV()
+    def rrotate(self, fake: bool=False) -> None:
+        if not fake: self.current_rotation = self.pool_piece.preV()
+        else: self.pool_piece.preV()
 
 class Piece_L(Base_piece):
     """ Piece L with 4 rotation """
@@ -495,6 +500,7 @@ def in_range(start: int, stop: int, input: int) -> bool:
 class Game_state(Enum):
     START = 'START'
     READY = 'READY'
+    COUNTDOWN = 'TETRIS'
     RUNNING = 'RUNNING'
     CLEAR = 'CLEAR'
     GAMEOVER = 'GAMEOVER'
@@ -556,11 +562,35 @@ class LevelUp_animate:
         else:
             self.__walker = 0
 
+class CountDown_animate:
+    __slots__ = '__walker', 'wait'
+    def __init__(self):
+        self.__walker = 0
+        self.wait = FPS * 3
+    
+    def __str__(self):
+        return 'Count Down animate'
+    
+    def do(self) -> bool:
+        if self.__walker != len(count_down):
+            for i in range(20):
+                for j in range(10):
+                    pyxel.blt(pixel8(j + 3), pixel8(i + 1), 0, *CHESS, W, H)
+            if self.__walker > 35: # show GO!
+                pyxel.blt(44, 84, 0, *count_down[self.__walker], 40, 24)
+            else: # Show 1, 2, 3
+                pyxel.blt(56, 48, 0, *count_down[self.__walker], 16, 24)
+            self.__walker += 1
+            return False
+        else:
+            self.__walker = 0
+            return True
+
 class Display:
     """ Display is part of main place that store pieces """
     __slots__ = 'tile_map', 'u', 'v', 'w', 'h', 'candidate_rows', 'valid_w', 'valid_h', \
         '_main_style', '__pesudo_display', 'is_full', 'clear_animate', 'gameOver_animate', \
-        'levelUp_animate',
+        'levelUp_animate', 'countDown_animate'
     def __init__(self):
         self.tile_map = 0
         self.u = 0
@@ -581,6 +611,7 @@ class Display:
         self.clear_animate = Clear_animate()
         self.gameOver_animate = GameOver_animate()
         self.levelUp_animate = LevelUp_animate()
+        self.countDown_animate = CountDown_animate()
 
     def __str__(self):
         """ Print pesudo display """
@@ -763,10 +794,10 @@ class Tetris:
     """ Tetris class """
     __slots__ = 'current_state', 'score', 'lines', 'level', 'display', 'speed', 'dont_draw_next_piece', \
         'time_last_frame', 'dt', 'time_since_last_move', '_current_piece', 'is_piece_placed', '__wait', \
-        'is_level_up'
+        'is_level_up', 'is_new_game'
     def __init__(self):
         pyxel.init(WIDTH, HEIGHT, display_scale=SCALE, title=GAME_NAME, fps=FPS)
-        pyxel.load("tetris.pyxres")
+        pyxel.load("./tetris.pyxres")
         pyxel.mouse(True)
         # Game state:
         self.current_state = Game_state.START
@@ -775,6 +806,7 @@ class Tetris:
         self.lines = 0
         self.level = LEVELS[0]
         self.is_level_up = NO
+        # self.is_new_game = YES
         # Display of Game:
         self.display = Display()
         # Frame timing:
@@ -832,32 +864,33 @@ class Tetris:
     def update(self) -> None:
         """ Update frame """
         try:
-            if self.wait(): return
+            if self.wait(): return # skip update
             time_this_frame = time()
             self.dt = time_this_frame - self.time_last_frame
             self.time_last_frame = time_this_frame
             self.time_since_last_move += self.dt
-            self.check_input()
-            self.check_mouse()
+            self.check_input_keyboard()
+            self.check_input_mouse()
             # Check game state:
             if self.time_since_last_move >= 1 / self.speed:
                 self.time_since_last_move = 0
                 match self.current_state:
                     case Game_state.RUNNING:
+                        # if self.is_new_game:
+                        #     self.__wait = self.display.countDown_animate.wait
+                        #     self.is_new_game = NO
+                        #     return
                         self.display.check_rows()
                         if not self.display.candidate_rows:
                             self.move_piece()
                         else: # Let's clear the rows
                             self.__wait = self.display.clear_animate.wait
-                            self.speed = CLEAR_SPEED
                             self.current_state = Game_state.CLEAR
                             if len(self.display.candidate_rows) == 4:
-                                pyxel.play(1, 9)
-                            else:
-                                pyxel.play(1, 7)
+                                pyxel.play(1, 9) # tetris moment
+                            else: pyxel.play(1, 7) # other moment
                         self.check_level()
                     case Game_state.CLEAR:
-                        self.speed = self.level.speed
                         score, lines = self.display.clear_rows()
                         self.score += score
                         self.lines += lines
@@ -868,7 +901,7 @@ class Tetris:
     def draw(self) -> None:
         """ Draw frame """
         try:
-            if not self.wait():
+            if not self.wait(): # skip draw
                 pyxel.cls(0)
                 self.display.draw(
                     state=self.current_state.value,
@@ -883,6 +916,9 @@ class Tetris:
                     self.display.draw_start()
                 case Game_state.READY:
                     self.display.draw_ready()
+                case Game_state.COUNTDOWN:
+                    if self.display.countDown_animate.do():
+                        self.current_state = Game_state.RUNNING
                 case Game_state.PAUSE:
                     self.display.draw_pause()
                 case Game_state.GAMEOVER:
@@ -893,6 +929,8 @@ class Tetris:
                 case Game_state.CLEAR:
                     self.display.clear_animate.do(self.display.candidate_rows)
                 case Game_state.RUNNING:
+                    # if self.is_new_game:
+                    #     self.display.countDown_animate.do()
                     if (
                         (not self.display.is_full)
                         and (not self.is_piece_placed)
@@ -926,11 +964,11 @@ class Tetris:
         # Move-down piece
         if not self.display.is_full:
             if not self.is_piece_placed:
-                if not self.display.piece_check_place(self.current_piece):
+                if not self.display.piece_check_place(self.current_piece): # piece placed
                     self.display.piece_placer(self.current_piece)
                     self.is_piece_placed = YES
                     pyxel.play(0, 5)
-                else:
+                else: # piece moved
                     self.current_piece.y += pixel8(1)
 
             else: # Next piece is going on
@@ -963,11 +1001,13 @@ class Tetris:
     
     def handle_move_down(self) -> None:
         """ Handle move down piece """
-        self.score += SCORE_FOR_MOVE_DOWN
+        # self.score += SCORE_FOR_MOVE_DOWN
         if self.current_piece.y + H <= self.current_piece.limit_y:
             self.current_piece.y += pixel8(1)
             if not self.display.piece_check_place(self.current_piece):
                 self.current_piece.y -= pixel8(1)
+            else:
+                self.score += SCORE_FOR_MOVE_DOWN
 
     def handle_rotate(self, mode: Direction) -> None:
         """
@@ -988,7 +1028,7 @@ class Tetris:
 
         # 1. if piece closed to bottom:
         # self.current_piece.y of previous piece
-        # self.current_piece.limit_y of new piece
+        # self.current_piece.limit_y of rotated piece
         if temp_y > self.current_piece.limit_y:
             if self.current_piece.y - pixel8(3) == self.current_piece.limit_y:
                 self.current_piece.y -= pixel8(3)
@@ -1001,7 +1041,7 @@ class Tetris:
 
         # 2. if piece closed to right wall:
         # self.current_piece.x of previous piece
-        # self.current_piece.limit_x of new piece
+        # self.current_piece.limit_x of rotated piece
         if temp_x > self.current_piece.limit_x:
             if self.current_piece.x - pixel8(3) == self.current_piece.limit_x:
                 self.current_piece.x -= pixel8(3)
@@ -1015,8 +1055,10 @@ class Tetris:
         # 3. If piece closed to other pieces or was between peaces or was between piece and wall:
         if not self.display.piece_check_place(self.current_piece):
             if mode == Direction.LeftTurn:
+                # self.current_piece.rrotate(fake=True)
                 self.current_piece.rotate()
             elif mode == Direction.RightTurn:
+                # self.current_piece.rotate(fake=True)
                 self.current_piece.rrotate()
             self.current_piece.x = temp_x - self.current_piece.limit_w
             self.current_piece.y = temp_y - self.current_piece.limit_h
@@ -1027,7 +1069,7 @@ class Tetris:
     def check_level(self) -> None:
         if self.lines >= self.level.line:
             if self.level.level_num + 1 != len(LEVELS):
-                self.__wait = self.display.clear_animate.wait
+                self.__wait = self.display.levelUp_animate.wait
                 self.level = LEVELS[self.level.level_num + 1]
                 self.display.style = self.level.color
                 self.speed = self.level.speed
@@ -1043,6 +1085,7 @@ class Tetris:
     def new_game(self) -> None:
         # Game state:
         self.current_state = Game_state.START
+        # self.is_new_game = YES
         # Game instance:
         self.score = 0
         self.lines = 0
@@ -1058,12 +1101,12 @@ class Tetris:
         self._current_piece = None
         self.current_piece = random_piece()
         self.current_piece.x = pixel8(6 + (len(self.current_piece.current_rotation[0])) // 2)
-        self.current_piece.y = self.display.valid_h[0] + pixel8(1)
+        self.current_piece.y = self.display.valid_h[0] # + pixel8(1)
         self.is_piece_placed = NO
 
     def toggle_music(self) -> None: ...
 
-    def check_input(self) -> None:
+    def check_input_keyboard(self) -> None:
         """ Capture keyboard inputs """
         if pyxel.btn(pyxel.KEY_RETURN):
             match self.current_state:
@@ -1073,8 +1116,9 @@ class Tetris:
                 case Game_state.READY:
                     # If Player didn't select level, by default level will be 0
                     if self.display.style == CHESS:
-                        self.set_level(level_number=0)
-                    self.current_state = Game_state.RUNNING
+                        self.set_level()
+                    self.current_state = Game_state.COUNTDOWN
+                    # self.current_state = Game_state.RUNNING
                     pyxel.play(0, 10)
                 case Game_state.RUNNING:
                     self.current_state = Game_state.PAUSE
@@ -1117,7 +1161,7 @@ class Tetris:
             if pyxel.btn(pyxel.KEY_X):
                 self.handle_rotate(Direction.LeftTurn)
 
-    def check_mouse(self) -> None:
+    def check_input_mouse(self) -> None:
         """ Capture mouse inputs """
         # print(pyxel.mouse_x, pyxel.mouse_y)
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
@@ -1160,6 +1204,7 @@ class Tetris:
                             self.set_level(level_number=0)
                         self.current_state = Game_state.RUNNING
                         pyxel.play(0, 10)
+
                 case Game_state.RUNNING: 
                     if ( # Press "Start" button
                         in_range(192, 200, pyxel.mouse_y)
@@ -1170,11 +1215,11 @@ class Tetris:
                     elif ( # Press "A" button
                         in_range(200, 224, pyxel.mouse_y)
                         and in_range(144, 167, pyxel.mouse_x)
-                    ): self.handle_rotate(Direction.RightTurn)
+                    ): self.handle_rotate(Direction.LeftTurn)
                     elif ( # Press "B" button
                         in_range(224, 248, pyxel.mouse_y)
                         and in_range(112, 135, pyxel.mouse_x)
-                    ): self.handle_rotate(Direction.LeftTurn)
+                    ): self.handle_rotate(Direction.RightTurn)
                     elif ( # Press "D-pad left" button
                         in_range(208, 232, pyxel.mouse_y)
                         and in_range(8, 32, pyxel.mouse_x)
@@ -1196,6 +1241,7 @@ class Tetris:
                         else:
                             self.dont_draw_next_piece = YES
                         pyxel.play(0, 4)
+
                 case Game_state.PAUSE:
                     if ( # Press "Start" button
                         in_range(192, 200, pyxel.mouse_y)
@@ -1203,6 +1249,7 @@ class Tetris:
                     ):
                         self.current_state = Game_state.RUNNING
                         pyxel.play(0, 0)
+
                 case Game_state.GAMEOVER | Game_state.END:
                     if ( # Press "Start" button
                         in_range(192, 200, pyxel.mouse_y)
