@@ -86,11 +86,11 @@ class Clear_animate:
     def __str__(self):
         return 'Clear animate based on NES Tetris'
 
-    def do(self, where: List[int]) -> None:
+    def do(self, where: List[int], color: Tuple[int]) -> None:
         if self.__walker != 6:
             for index in where:
                 for j in Clear_LOC[self.__walker]:
-                    pyxel.blt(pixel8(3 + j), pixel8(1 + index), 0, *CLEAR, W, H)
+                    pyxel.blt(pixel8(3 + j), pixel8(1 + index), 0, *color, W, H)
             self.__walker += 1
         else:
             self.__walker = 0
@@ -476,7 +476,7 @@ class Tetris:
                 case Game_state.END:
                     self.display.draw_end()
                 case Game_state.CLEAR:
-                    self.display.clear_animate.do(self.display.candidate_rows)
+                    self.display.clear_animate.do(self.display.candidate_rows, self.level.color)
                 case Game_state.RUNNING:
                     # if self.is_new_game:
                     #     self.display.countDown_animate.do()
@@ -662,6 +662,7 @@ class Tetris:
                 case Game_state.START:
                     self.current_state = Game_state.READY
                     pyxel.play(0, 10)
+
                 case Game_state.READY:
                     # If Player didn't select level, by default level will be 0
                     if self.display.style == CHESS:
@@ -669,12 +670,15 @@ class Tetris:
                     self.current_state = Game_state.COUNTDOWN
                     # self.current_state = Game_state.RUNNING
                     pyxel.play(0, 10)
+
                 case Game_state.RUNNING:
                     self.current_state = Game_state.PAUSE
                     pyxel.play(0, 0)
+
                 case Game_state.PAUSE:
                     self.current_state = Game_state.RUNNING
                     pyxel.play(0, 0)
+
                 case Game_state.GAMEOVER | Game_state.END:
                     self.new_game()
         
@@ -722,6 +726,7 @@ class Tetris:
                     ):
                         self.current_state = Game_state.READY
                         pyxel.play(0, 10)
+
                 case Game_state.READY:
                     if in_range(64, 69, pyxel.mouse_y): # Ready display for choose level
                         if in_range(24, 31, pyxel.mouse_x): # Select level 0
