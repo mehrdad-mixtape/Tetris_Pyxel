@@ -59,7 +59,7 @@
         2. Install **UserLand** and setup your linux distribution (I recommend install **debian without Gui**)
         3. Install this packages
         ```bash
-        sudo apt install curl git net-tools
+        sudo apt install curl git vim net-tools python3
         ```
         4. Find you IP-ADDRESS (looking for **wlan** interface)
         ```bash
@@ -85,7 +85,7 @@
         ```
         7. Run the source code of run-game-server
         ```bash
-        python3 code/server.py --addr 192.168.x.x --port 80
+        python3 code/server.py --addr 192.168.x.x --port 8000
         ```
         8. Open Your ***Chrome Browser*** & Go to URL --> http://ADDR:PORT & Click On ***game.html*** & Wait For Minutes
         9. Game Will Be Start On Your Browser!
