@@ -1,3 +1,5 @@
+from typing import Any, Callable, List, Tuple, Dict
+from sys import getsizeof
 PYTHON_VERSION = '310'
 WIDTH = 176
 HEIGHT = 240
@@ -5,6 +7,8 @@ SCALE = 16
 FPS = 12 # Don't Change it! if you increase FPS, keyboard-inputs caching will be so fast
 GAME_NAME = 'Pyxel TETRIS'
 MAX_LEN_Q = 3
+CLEAR_SPEED = FPS * 2
+GAMEOVER_SPEED = 30
 YES = True
 NO = False
 ON = True
@@ -14,10 +18,7 @@ L = 'l'
 SCORE_FOR_EACH_ROW = 240
 SCORE_FOR_EACH_PIECE = 30
 SCORE_FOR_MOVE_DOWN = 1
-XP_FOR_4LINE = 4
-XP_FOR_3LINE = 2.5
-XP_FOR_2LINE = 1.5
-XP_FOR_1LINE = 1
+XP_FOR_LINES = {1: 1, 2: 1.5, 3: 2.5, 4: 4}
 KEY_BINDS = """
 Key binds:
 
@@ -41,6 +42,39 @@ ENTER:
 BACKSpace:
 -GameOver
 """
+CHOOSE_LEVEL_BANNER_1 = """
+Choose level
+ ----------
+ with Mouse
+"""
+CHOOSE_LEVEL_BANNER_2 = """
+Press SELECT
+
+     Or
+
+Press ENTER
+"""
+GAMEOVER_BANNER = """
+Press Esc to Exit
+
+   Press ENTER
+
+       Or
+
+   Press START
+
+  to Play Again
+"""
+END_BANNER = """
+    End Game!
+    ---------
+     Dev by
+  mehrdad-mixtape
+
+ Press Esc to Exit
+
+Press ENTER to Play
+"""
 GAME_STATE_COLOR = {
     'START': 0,
     'READY': 2,
@@ -50,16 +84,14 @@ GAME_STATE_COLOR = {
     'PAUSE': 9,
     'END': 12
 }
-DEAD_SPEED = 30
-CLEAR_SPEED = 3
-Clear_LOC = [
-    (4, 5),
-    (3, 4, 5, 6),
-    (2, 3, 4, 5, 6, 7),
-    (1, 2, 3, 4, 5, 6, 7, 8),
-    (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
+CLEAR_LOC: List[Dict[Tuple[int], bool]] = [
+    {(0, 9): NO},
+    {(1, 8): NO},
+    {(2, 7): NO},
+    {(3, 6): NO},
+    {(4, 5): NO},
 ]
-LevelUp_LOC = [1, 2, 3, 4]
-count_down = [
+LEVELUP_LOC = [1, 2, 3, 4]
+COUNTDOWN = [ # TODO find a way to use yield and next!
     loc for loc in ((120, 24), (136, 24), (152, 24), (168, 24)) for _ in range(FPS)
 ]
