@@ -22,9 +22,10 @@ from piece import *
 from settings import *
 
 class Game_state(Enum): ...
-class GameOver_animate: ...
-class LevelUp_animate: ...
-class CountDown_animate: ...
+class Remember: ...
+class GameOver_animate(Remember): ...
+class LevelUp_animate(Remember): ...
+class CountDown_animate(Remember): ...
 class Display: ...
 class Tetris: ...
 
@@ -61,55 +62,66 @@ class Game_state(Enum):
     PAUSE = 'PAUSE'
     END = 'END'
 
-class GameOver_animate:
+class Remember:
+    def __init__(self, remember: int):
+        self.__remember = remember
+    
+    @property
+    def remember(self) -> int:
+        return self.__remember
+
+    @remember.setter
+    def remember(self, value: int) -> None:
+        self.__remember = value
+
+    def do(self) -> Any: ...
+
+class GameOver_animate(Remember):
     def __init__(self, display: Display):
-        self.__walker = 19
+        super().__init__(19)
         self.__display = display
 
     def do(self) -> None:
-        if self.__walker > -1:
+        if self.remember > -1:
             for j in range(0, 10):
-                self.__display[self.__walker][j].style = DEAD
-            self.__walker -= 1
+                self.__display[self.remember][j].style = DEAD
+            self.remember -= 1
 
-        if self.__walker == -21:
+        if self.remember == -21:
             return
 
-        if self.__walker <= -1:
+        if self.remember <= -1:
             for j in range(0, 10):
-                self.__display[-1 + self.__walker * -1][j].style = CHESS
-            self.__walker -= 1
+                self.__display[-1 + self.remember * -1][j].style = CHESS
+            self.remember -= 1
 
-class LevelUp_animate:
+class LevelUp_animate(Remember):
     def __init__(self):
-        self.__walker = 0
-    
-    def __str__(self):
-        return 'Level Up animate'
+        super().__init__(0)
 
     def do(self) -> bool:
-        if self.__walker != len(LEVELUP_LOC):
-            pyxel.text(47, 58 + pixel8(LEVELUP_LOC[self.__walker]), 'Level UP!', pyxel.frame_count % 16)
-            self.__walker += 1
+        if self.remember != len(LEVELUP_LOC):
+            pyxel.text(47, 58 + pixel8(LEVELUP_LOC[self.remember]), 'LevelUP!', pyxel.frame_count % 16)
+            self.remember += 1
             return NO
         else:
-            self.__walker = 0
+            self.remember = 0
             return YES
 
-class CountDown_animate:
+class CountDown_animate(Remember):
     def __init__(self):
-        self.__walker = 0    
+        super().__init__(0)
 
     def do(self) -> bool:
-        if self.__walker != len(COUNTDOWN):
-            if self.__walker <= 35: # Show 1, 2, 3
-                pyxel.blt(56, 48, 0, *COUNTDOWN[self.__walker], 16, 24)
+        if self.remember != len(COUNTDOWN):
+            if self.remember <= 35: # Show 1, 2, 3
+                pyxel.blt(56, 48, 0, *COUNTDOWN[self.remember], 16, 24)
             else: # show GO!
-                pyxel.blt(44, 84, 0, *COUNTDOWN[self.__walker], 40, 24)
-            self.__walker += 1
+                pyxel.blt(44, 84, 0, *COUNTDOWN[self.remember], 40, 24)
+            self.remember += 1
             return NO
         else:
-            self.__walker = 0
+            self.remember = 0
             return YES
 
 class Display:
@@ -603,6 +615,7 @@ class Tetris:
         self.current_piece.x = pixel8(6 + (len(self.current_piece.current_rotation[0])) // 2)
         self.current_piece.y = self.display.valid_h[0] # + pixel8(1)
         self.is_piece_placed = NO
+        self.is_new_game = YES
 
     def toggle_music(self) -> None: ...
 
