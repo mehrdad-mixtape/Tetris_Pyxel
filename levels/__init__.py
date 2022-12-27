@@ -30,7 +30,6 @@ Statics_level: Dict[int, Tuple[float, int, Tuple[int]]] = { # level_number: (spe
     13: (13, 145, BLUE),
     14: (15, 160, BLUE),
 }
-
 LEVELS: List[Level] = [
     Level(
         n,
