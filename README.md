@@ -3,15 +3,8 @@
 - Programming Language: (Python3.10)
 - Retro Game Engine **[Pyxel](https://github.com/kitao/pyxel)**
 
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index.gif)
-
 ## Interview:
-### Start:
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index1.png)
-### Ready:
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index2.png)
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index3.png)
-
+![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index.gif)
 
 ## Platforms:
 - Linux (Absolutely worked)
