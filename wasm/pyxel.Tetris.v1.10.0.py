@@ -34,7 +34,7 @@ from typing import List, Tuple, Dict
 
 PYTHON_VERSION = '310'
 WIDTH = 176
-HEIGHT = 240
+HEIGHT = 256
 SCALE = 16
 FPS = 12 # Don't Change it! if you increase FPS, keyboard-inputs caching will be so fast
 GAME_NAME = 'Pyxel TETRIS'
