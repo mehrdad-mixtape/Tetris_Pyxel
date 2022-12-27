@@ -1,5 +1,5 @@
-from typing import Any, Callable, List, Tuple, Dict
-from sys import getsizeof
+from typing import List, Tuple, Dict
+
 PYTHON_VERSION = '310'
 WIDTH = 176
 HEIGHT = 240
@@ -18,7 +18,12 @@ L = 'l'
 SCORE_FOR_EACH_ROW = 240
 SCORE_FOR_EACH_PIECE = 30
 SCORE_FOR_MOVE_DOWN = 1
-XP_FOR_LINES = {1: 1, 2: 1.5, 3: 2.5, 4: 4}
+XP_FOR_LINES = {
+    1: 1,
+    2: 1.5,
+    3: 2.5,
+    4: 4
+}
 KEY_BINDS = """
 Key binds:
 
@@ -75,7 +80,7 @@ END_BANNER = """
 
 Press ENTER to Play
 """
-GAME_STATE_COLOR = {
+GAME_STATE_COLOR: Dict[str, int] = {
     'START': 0,
     'READY': 2,
     'RUNNING': 3,
@@ -91,7 +96,10 @@ CLEAR_LOC: List[Dict[Tuple[int], bool]] = [
     {(3, 6): NO},
     {(4, 5): NO},
 ]
-LEVELUP_LOC = [1, 2, 3, 4]
-COUNTDOWN = [ # TODO find a way to use yield and next!
-    loc for loc in ((120, 24), (136, 24), (152, 24), (168, 24)) for _ in range(FPS)
+LEVELUP_LOC: List[int] = [
+    1, 2, 3, 4
+]
+COUNTDOWN: List[Tuple[int]] = [ # TODO find a way to use yield and next!
+    # loc for loc in ((120, 24), (136, 24), (152, 24), (168, 24)) for _ in range(FPS)
+    (120, 24), (136, 24), (152, 24), (168, 24)
 ]
