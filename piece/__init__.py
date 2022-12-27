@@ -28,6 +28,9 @@ class Cycle:
     def __str__(self):
         return f"Index={self.__index}, Len={self.__len}"
     
+    def __len__(self):
+        return len(self.__cycle)
+    
     def nexT(self) -> Any:
         if self.__index + 1 == self.__len:
             self.__index = 0
@@ -64,13 +67,11 @@ class Base_piece:
         self.pool_piece: Cycle = Cycle() # store all rotations of piece
         self.style: Tuple[int] = (0, 0)
 
-    def rotate(self, fake: bool=False) -> None:
-        if not fake: self.current_rotation = self.pool_piece.nexT()
-        else: self.pool_piece.nexT()
+    def rotate(self) -> None:
+        self.current_rotation = self.pool_piece.nexT()
     
-    def rrotate(self, fake: bool=False) -> None:
-        if not fake: self.current_rotation = self.pool_piece.preV()
-        else: self.pool_piece.preV()
+    def rrotate(self) -> None:
+        self.current_rotation = self.pool_piece.preV()
 
 class Piece_L(Base_piece):
     """ Piece L with 4 rotation """
@@ -318,9 +319,9 @@ class Piece_O(Base_piece):
 
 Piece = Union[Piece_L, Piece_J, Piece_I, Piece_S, Piece_Z, Piece_T, Piece_O]
 ALL_PIECES: List[Piece] = [
+    Piece_I,
     Piece_L,
     Piece_J,
-    Piece_I,
     Piece_S,
     Piece_Z,
     Piece_T,
