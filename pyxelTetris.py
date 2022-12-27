@@ -519,7 +519,6 @@ class Tetris:
     
     def handle_move_down(self) -> None:
         """ Handle move down piece """
-        # self.score += SCORE_FOR_MOVE_DOWN
         if self.current_piece.y + H <= self.current_piece.limit_y:
             self.current_piece.y += pixel8(1)
             if not self.display.piece_check_place(self.current_piece):
@@ -573,13 +572,11 @@ class Tetris:
 
             # 3. If piece closed to other pieces or was between peaces or was between piece and wall:
             if self.display.piece_check_place(self.current_piece):
-                print("for rotate {}".format(_))
                 pyxel.play(0, 3)
                 break
 
         # else:
         #     while not self.display.piece_check_place(self.current_piece):
-        #         print("else rotate")
         #         if mode == Direction.LeftTurn:
         #             self.current_piece.rotate()
         #         elif mode == Direction.RightTurn:
