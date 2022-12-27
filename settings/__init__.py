@@ -99,7 +99,6 @@ CLEAR_LOC: List[Dict[Tuple[int], bool]] = [
 LEVELUP_LOC: List[int] = [
     1, 2, 3, 4
 ]
-COUNTDOWN: List[Tuple[int]] = [ # TODO find a way to use yield and next!
-    # loc for loc in ((120, 24), (136, 24), (152, 24), (168, 24)) for _ in range(FPS)
+COUNTDOWN: List[Tuple[int]] = [
     (120, 24), (136, 24), (152, 24), (168, 24)
 ]
