@@ -91,14 +91,6 @@
         8. Open Your ***Chrome Browser*** & Go to URL --> http://ADDR:PORT & Click On ***game.html*** & Wait For Minutes
         9. Game Will Be Start On Your Browser!
 
-## Game:
-### Pause:
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index4.png)
-### Running:
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index5.png)
-### GameOver:
-![image](https://github.com/mehrdad-mixtape/Tetris_Pyxel/blob/master/images/index6.png)
-
 ## Issus:
 I fixed many `Critical Bugs`, But maybe ... :)
 - I made the first version in ***3 days*** on my free time! Just for Fun with (Pyxel retro game engine)
