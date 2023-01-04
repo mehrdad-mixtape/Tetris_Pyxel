@@ -14,21 +14,21 @@ class Level:
         return f"{self.level_num=} {self.speed=} {self.line=} {self.color=}"
 
 Statics_level: Dict[int, Tuple[float, int, Tuple[int]]] = { # level_number: (speed, line, color)
-    0: (2, 15, YELLOW),
+    0: (2.0, 15, YELLOW),
     1: (2.5, 25, YELLOW),
-    2: (3, 35, YELLOW),
+    2: (3.0, 35, YELLOW),
     3: (3.5, 45, YELLOW),
-    4: (4, 55, YELLOW),
+    4: (4.0, 55, YELLOW),
     5: (4.5, 65, PINK),
-    6: (5, 75, PINK),
+    6: (5.0, 75, PINK),
     7: (5.5, 85, PINK),
     8: (6.5, 95, PINK),
     9: (7.5, 105, PINK),
     10: (8.5, 115, BLUE),
-    11: (10, 125, BLUE),
+    11: (10.0, 125, BLUE),
     12: (11.5, 135, BLUE),
-    13: (13, 145, BLUE),
-    14: (15, 160, BLUE),
+    13: (13.0, 145, BLUE),
+    14: (15.0, 160, BLUE),
 }
 LEVELS: List[Level] = [
     Level(
