@@ -1,13 +1,47 @@
 from typing import Any, Tuple, Union, List
 from collections import deque
+from itertools import cycle
 from enum import Enum
 
-BLUE = (16, 24)
-PINK = (24, 16)
-YELLOW = (32, 16)
-CYAN = (80, 0)
-RED = (0, 24)
+BLACK = (0, 0)
+DARK_BLUE = (96, 0)
 PURPLE = (8, 24)
+DARK_GREEN = (24, 24)
+BROWN = (32, 24)
+BLUE = (16, 24)
+WHITE_BLUE = (40, 24)
+WHITE = (72, 16)
+RED = (0, 24)
+ORANGE = (48, 24)
+YELLOW = (32, 16)
+GREEN = (56, 24)
+MID_BLUE = (96, 8)
+GRAY = (64, 24)
+PINK = (24, 16)
+WHITE_PINK = (64, 32)
+
+COLORS: cycle = cycle(
+    [
+        BLACK,
+        DARK_BLUE,
+        PURPLE,
+        DARK_GREEN,
+        BROWN,
+        BLUE,
+        WHITE_BLUE,
+        WHITE,
+        RED,
+        ORANGE,
+        YELLOW,
+        GREEN,
+        MID_BLUE,
+        GRAY,
+        PINK,
+        WHITE_PINK, 
+    ]
+)
+
+CYAN = (80, 0)
 CHESS = (104, 32)
 DEAD = (0, 16)
 CLEAR = (8, 16)
