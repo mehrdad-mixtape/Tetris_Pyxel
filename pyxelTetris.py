@@ -11,7 +11,7 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.14.2'
+__version__ = 'v1.14.5'
 
 import pyxel, sys
 from enum import Enum
@@ -311,7 +311,7 @@ class Tetris:
     """ Tetris class """
     __slots__ = 'current_state', 'score', 'lines', 'level', 'display', 'speed', 'draw_next_piece', \
         'time_last_frame', 'dt', 'time_since_last_move', '__current_piece', 'is_piece_placed', \
-        'is_level_up', 'is_new_game', 'force_update'
+        'is_level_up', 'is_new_game', 'force_update', 'is_tetris_moment'
     def __init__(self):
         # Game state:
         self.current_state = Game_state.START
@@ -322,6 +322,7 @@ class Tetris:
         self.lines = 0
         self.level = LEVELS[0]
         self.is_level_up = NO
+        self.is_tetris_moment = NO
         # Display of Game:
         self.display = Display()
         # Frame timing:
@@ -395,6 +396,7 @@ class Tetris:
                             self.current_state = Game_state.CLEAR
                             if len(self.display.candidate_rows) == 4:
                                 pyxel.play(1, 9) # tetris moment
+                                self.is_tetris_moment = YES
                             else: pyxel.play(1, 7) # other moment
                             self.speed = CLEAR_SPEED
                         self.check_level()
@@ -402,10 +404,12 @@ class Tetris:
                     case Game_state.CLEAR:
                         score, lines = self.display.clear_rows()
                         if score and lines:
+                            self.display.style = self.level.color
                             self.speed = self.level.speed
                             self.current_state = Game_state.RUNNING
                             self.score += score
                             self.lines += lines
+                            self.is_tetris_moment = NO
 
                     case Game_state.LEVELUP:
                         if self.is_level_up:
@@ -450,6 +454,8 @@ class Tetris:
                         )
 
                 case Game_state.CLEAR:
+                    if self.is_tetris_moment:
+                        self.display.style = next(COLORS)
                     self.display.draw_next_piece(kill_switch=self.draw_next_piece)
 
                 case Game_state.LEVELUP:
