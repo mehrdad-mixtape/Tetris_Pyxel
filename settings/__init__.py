@@ -91,6 +91,8 @@ GAME_STATE_COLOR: Dict[str, int] = {
 }
 CLEAR_LOC: List[Dict[Tuple[int], bool]] = [
     {(0, 9): NO},
+    {(0, 9): NO},
+    {(0, 9): NO},
     {(1, 8): NO},
     {(2, 7): NO},
     {(3, 6): NO},
