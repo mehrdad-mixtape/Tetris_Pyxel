@@ -25,9 +25,9 @@
 2. Run `pyxelTetris`
 
 ### Directly:
-1. Install [pyxel](https://github.com/kitao/pyxel) version **1.8.5** 
+1. Install [pyxel](https://github.com/kitao/pyxel) version **1.9.7** 
     ```bash
-    pipx install pyxel==1.8.5
+    pipx install pyxel==1.9.7
     ```
 2. Enjoy!
     - Run:
