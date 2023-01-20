@@ -25,10 +25,10 @@ Statics_level: Dict[int, Tuple[float, int, Tuple[int]]] = { # level_number: (spe
     8: (6.5, 95, PINK),
     9: (7.5, 105, PINK),
     10: (8.5, 115, BLUE),
-    11: (10.0, 125, BLUE),
-    12: (11.5, 135, BLUE),
-    13: (13.0, 145, BLUE),
-    14: (15.0, 160, BLUE),
+    11: (9.5, 125, BLUE),
+    12: (10.5, 135, BLUE),
+    13: (12.0, 145, BLUE),
+    14: (13.0, 160, BLUE),
 }
 LEVELS: List[Level] = [
     Level(
