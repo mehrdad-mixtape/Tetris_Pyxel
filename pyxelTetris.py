@@ -11,7 +11,7 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.14.7'
+__version__ = 'v1.14.8'
 
 import pyxel, sys
 from enum import Enum
@@ -188,6 +188,7 @@ class Display:
     def draw_piece(self, piece: Piece, loc_x: int, loc_y: int, style: Tuple[int]=None) -> None:
         """ Draw piece that falling on display """
         for i, row in enumerate(piece.current_rotation):
+            if not sum(row): continue
             for j, col in enumerate(row):
                 if col:
                     if style is None:
@@ -262,7 +263,6 @@ class Display:
                         I = j - 1 + rpixel8(piece.y) + 1
                         J = i - 3 + rpixel8(piece.x)
                         # Other pieces maybe fill loc_x + i and loc_y + j
-                        print(self.__pesudo_display[I][J].fill)
                         if self.__pesudo_display[I][J].fill:
                             return False
                     except IndexError:
@@ -331,8 +331,7 @@ class Tetris:
         # Current piece:
         self.__current_piece = None
         self.current_piece = random_piece()
-        self.current_piece.x = pixel8(6 + (len(self.current_piece.current_rotation[0])) // 2)
-        self.current_piece.y = self.display.valid_h[0]
+        self.init_loc_piece()
         # Game Flags:
         self.is_new_game = YES
         self.is_level_up = NO
@@ -369,10 +368,10 @@ class Tetris:
     def current_piece(self, new_piece: Piece) -> None:
         """ Set new piece to current_piece and update important instance of piece """
         self.__current_piece = new_piece
-        self.__current_piece.limit_h = pixel8(len(self.__current_piece.current_rotation) - 1)
-        self.__current_piece.limit_w = pixel8(len(self.__current_piece.current_rotation[0]) - 1)
-        self.__current_piece.limit_x = self.display.valid_w[1] - self.__current_piece.limit_h
-        self.__current_piece.limit_y = self.display.valid_h[1] - self.__current_piece.limit_w
+        self.__current_piece.limit_h = pixel8(len(self.__current_piece.current_rotation[0]) - 1)
+        self.__current_piece.limit_w = pixel8(len(self.__current_piece.current_rotation) - 1)
+        self.__current_piece.limit_x = self.display.valid_w[1] - self.__current_piece.limit_w
+        self.__current_piece.limit_y = self.display.valid_h[1] - self.__current_piece.limit_h
 
     @property
     def current_state(self) -> Game_state:
@@ -422,14 +421,13 @@ class Tetris:
                             self.display.style = self.level.color
                             self.speed = self.level.speed
                             self.current_state = Game_state.RUNNING
-                            self.score += score + self.level.line * 100
+                            self.score += score + self.level.line * 50
                             self.lines += lines
                             self.is_tetris_moment = NO
                             self.move_piece() # prevent to show blink animate
 
                     case Game_state.LEVELUP:
                         if self.is_level_up:
-                            pyxel.play(2, 8)
                             self.set_level(level_number=self.level.level_num + 1)
                             self.current_state = Game_state.RUNNING
                             self.is_level_up = NO
@@ -507,10 +505,18 @@ class Tetris:
 
     def admit_piece(self) -> None:
         """ Admit important Instance of piece """
-        self.current_piece.limit_h = pixel8(len(self.current_piece.current_rotation) - 1)
-        self.current_piece.limit_w = pixel8(len(self.current_piece.current_rotation[0]) - 1)
-        self.current_piece.limit_x = self.display.valid_w[1] - self.current_piece.limit_h
-        self.current_piece.limit_y = self.display.valid_h[1] - self.current_piece.limit_w
+        self.current_piece.limit_h = pixel8(len(self.current_piece.current_rotation[0]) - 1)
+        self.current_piece.limit_w = pixel8(len(self.current_piece.current_rotation) - 1)
+        self.__current_piece.limit_x = self.display.valid_w[1] - self.__current_piece.limit_w
+        self.current_piece.limit_y = self.display.valid_h[1] - self.current_piece.limit_h
+
+    def init_loc_piece(self) -> None:
+        if self.current_piece.name == 'I':
+            self.current_piece.y = self.display.valid_h[0] - pixel8(1)
+            self.current_piece.x = pixel8(4 + (len(self.current_piece.current_rotation[0])) // 2)
+        else:
+            self.current_piece.y = self.display.valid_h[0]
+            self.current_piece.x = pixel8(6 + (len(self.current_piece.current_rotation[0])) // 2)
 
     def move_piece(self) -> None:
         """ Move down piece in each frame """
@@ -530,10 +536,7 @@ class Tetris:
                 self.is_piece_placed = NO
                 self.current_piece = random_piece()
                 self.admit_piece()
-                self.current_piece.y = self.display.valid_h[0]
-                self.current_piece.x = pixel8(
-                    6 + (len(self.current_piece.current_rotation[0])) // 2
-                )
+                self.init_loc_piece()
         else:
             self.current_state = Game_state.GAMEOVER
             pyxel.play(0, 6)
@@ -614,24 +617,20 @@ class Tetris:
                 if self.current_piece.x - pixel8(3) == self.current_piece.limit_x:
                     offset_x = pixel8(3)
                     self.current_piece.x -= offset_x
-                    print(3)
 
                 elif self.current_piece.x - pixel8(2) == self.current_piece.limit_x:
                     offset_x = pixel8(2)
                     self.current_piece.x -= offset_x
-                    print(2)
 
                 elif self.current_piece.x - pixel8(1) == self.current_piece.limit_x:
                     offset_x = pixel8(1)
                     self.current_piece.x -= offset_x
-                    print(1)
 
             # 3. If piece closed to other pieces or was between peaces or was between piece and wall:
             if self.display.piece_check_place(self.current_piece):
                 pyxel.play(0, 3)
                 break
             else:
-                print('hey')
                 if offset_x: self.current_piece.x += offset_x
                 if offset_y: self.current_piece.y += offset_y
 
@@ -641,6 +640,7 @@ class Tetris:
         if self.lines >= self.level.line:
             if self.level.level_num + 1 != len(LEVELS):
                 self.current_state = Game_state.LEVELUP
+                pyxel.play(2, 8)
             else: self.current_state = Game_state.END
     
     def set_level(self, level_number: int=0) -> None:
@@ -665,8 +665,7 @@ class Tetris:
         # Current Piece:
         self.__current_piece = None
         self.current_piece = random_piece()
-        self.current_piece.x = pixel8(6 + (len(self.current_piece.current_rotation[0])) // 2)
-        self.current_piece.y = self.display.valid_h[0]
+        self.init_loc_piece()
         # Game Flags:
         self.is_new_game = YES
         self.is_level_up = NO
