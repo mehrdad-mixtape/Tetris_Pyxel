@@ -18,11 +18,11 @@ L = 'l'
 SCORE_FOR_EACH_ROW = 240
 SCORE_FOR_EACH_PIECE = 30
 SCORE_FOR_MOVE_DOWN = 1
-XP_FOR_LINES = {
-    1: 1,
+XP_FOR_LINES: Dict[int, float] = {
+    1: 1.0,
     2: 1.5,
     3: 2.5,
-    4: 4
+    4: 4.0,
 }
 KEY_BINDS = """
 Key binds:
