@@ -89,7 +89,7 @@ class Block:
 class Base_piece:
     """ Father of All-Pieces, All rotations of pieces store on 'Cycle' data-structure """
     __slots__ = 'limit_h', 'limit_w', 'x', 'y', 'limit_x', 'limit_y', \
-        'current_rotation', 'pool_piece', 'style'
+        'current_rotation', 'pool_piece', 'style', 'name'
     def __init__(self):
         self.limit_h = 0 # height of piece
         self.limit_w = 0 # width of piece
@@ -112,6 +112,7 @@ class Piece_L(Base_piece):
     __slots__ = '_piece_01', '_piece_02', '_piece_03', '_piece_04'
     def __init__(self):
         super().__init__()
+        self.name = 'L'
         self.style = (8, 0)
         self._piece_01 = (
             (1, 1, 1,),
@@ -154,6 +155,7 @@ class Piece_J(Base_piece):
     __slots__ = '_piece_11', '_piece_12', '_piece_13', '_piece_14'
     def __init__(self):
         super().__init__()
+        self.name = 'J'
         self.style = (24, 8)
         self._piece_11 = (
             (1, 0, 0,),
@@ -193,21 +195,32 @@ class Piece_J(Base_piece):
 
 class Piece_I(Base_piece):
     """ Piece I with 2 rotation """
-    __slots__ = '_piece_21', '_piece_22'
+    __slots__ = '_piece_21', '_piece_22', '_piece_23'
     def __init__(self):
         super().__init__()
+        self.name = 'I'
         self.style = (24, 0)
         self._piece_21 = (
-            (1,),
-            (1,),
-            (1,),
-            (1,),
+            (0, 1, 0, 0,),
+            (0, 1, 0, 0,),
+            (0, 1, 0, 0,),
+            (0, 1, 0, 0,),
         )
         self._piece_22 = (
+            # (0, 0, 0, 0,),
             (1, 1, 1, 1,),
+            # (0, 0, 0, 0,),
+        )
+        self._piece_23 = (
+            (0, 0, 1, 0,),
+            (0, 0, 1, 0,),
+            (0, 0, 1, 0,),
+            (0, 0, 1, 0,),
         )
         self.pool_piece = Cycle(
             self._piece_21,
+            self._piece_22,
+            self._piece_23,
             self._piece_22,
         )
         self.current_rotation = self._piece_21
@@ -228,6 +241,7 @@ class Piece_S(Base_piece):
     __slots__ = '_piece_31', '_piece_32'
     def __init__(self):
         super().__init__()
+        self.name = 'S'
         self.style = (8, 8)
         self._piece_31 = (
             (1, 0,),
@@ -259,6 +273,7 @@ class Piece_Z(Base_piece):
     __slots__ = '_piece_41', '_piece_42'
     def __init__(self):
         super().__init__()
+        self.name = 'Z'
         self.style = (0, 8)
         self._piece_41 = (
             (0, 1,),
@@ -290,6 +305,7 @@ class Piece_T(Base_piece):
     __slots__ = '_piece_51', '_piece_52', '_piece_53', '_piece_54'
     def __init__(self):
         super().__init__()
+        self.name = 'T'
         self.style = (16, 0)
         self._piece_51 = (
             (0, 1, 0,),
@@ -332,6 +348,7 @@ class Piece_O(Base_piece):
     __slots__ = '_piece_61'
     def __init__(self):
         super().__init__()
+        self.name = 'O'
         self.style = (16, 8)
         self._piece_61 = (
             (1, 1,),
@@ -354,11 +371,11 @@ class Piece_O(Base_piece):
 Piece = Union[Piece_L, Piece_J, Piece_I, Piece_S, Piece_Z, Piece_T, Piece_O]
 ALL_PIECES: List[Piece] = [
     Piece_I,
-    Piece_L,
-    Piece_J,
-    Piece_S,
-    Piece_Z,
-    Piece_T,
-    Piece_O
+    # Piece_L,
+    # Piece_J,
+    # Piece_S,
+    # Piece_Z,
+    # Piece_T,
+    # Piece_O
 ]
 queue_piece: List[Piece] = deque()
