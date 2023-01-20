@@ -63,7 +63,7 @@ class Cycle:
         return f"Index={self.__index}, Len={self.__len}"
     
     def __len__(self):
-        return len(self.__cycle)
+        return self.__len
     
     def nexT(self) -> Any:
         if self.__index + 1 == self.__len:
@@ -88,8 +88,8 @@ class Block:
 
 class Base_piece:
     """ Father of All-Pieces, All rotations of pieces store on 'Cycle' data-structure """
-    __slots__ = 'limit_h', 'limit_w', 'x', 'y', 'limit_x', \
-        'limit_y', 'current_rotation', 'pool_piece', 'style'
+    __slots__ = 'limit_h', 'limit_w', 'x', 'y', 'limit_x', 'limit_y', \
+        'current_rotation', 'pool_piece', 'style'
     def __init__(self):
         self.limit_h = 0 # height of piece
         self.limit_w = 0 # width of piece
@@ -98,7 +98,7 @@ class Base_piece:
         self.limit_x = 0 # maximum loc_x value that the piece can have on Display.
         self.limit_y = 0 # maximum loc_y value that the piece can have on Display.
         self.current_rotation: Tuple[Tuple[str]] = None
-        self.pool_piece: Cycle = Cycle() # store all rotations of piece
+        self.pool_piece: Cycle = None # store all rotations of piece.
         self.style: Tuple[int] = (0, 0)
 
     def rotate(self) -> None:
@@ -193,7 +193,7 @@ class Piece_J(Base_piece):
 
 class Piece_I(Base_piece):
     """ Piece I with 2 rotation """
-    __slots__ = '_piece_21', '_piece_22', '__allowed'
+    __slots__ = '_piece_21', '_piece_22'
     def __init__(self):
         super().__init__()
         self.style = (24, 0)
