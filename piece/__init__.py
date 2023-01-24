@@ -371,11 +371,11 @@ class Piece_O(Base_piece):
 Piece = Union[Piece_L, Piece_J, Piece_I, Piece_S, Piece_Z, Piece_T, Piece_O]
 ALL_PIECES: List[Piece] = [
     Piece_I,
-    # Piece_L,
-    # Piece_J,
-    # Piece_S,
-    # Piece_Z,
-    # Piece_T,
-    # Piece_O
+    Piece_L,
+    Piece_J,
+    Piece_S,
+    Piece_Z,
+    Piece_T,
+    Piece_O
 ]
 queue_piece: List[Piece] = deque()
