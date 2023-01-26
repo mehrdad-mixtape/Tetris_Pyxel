@@ -11,7 +11,7 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.14.8'
+__version__ = 'v1.14.9'
 
 import pyxel, sys
 from enum import Enum
@@ -195,6 +195,10 @@ class Display:
                         pyxel.blt(loc_x + pixel8(i), loc_y + pixel8(j), 0, *piece.style, W, H)
                     else: pyxel.blt(loc_x + pixel8(i), loc_y + pixel8(j), 0, *style, W, H)
 
+    def draw_top_bar(self) -> None:
+        """ Draw the top bar of display """
+        for i in range(10): pyxel.blt(pixel8(i + 3), 0, 0, 120, 16, W, H)
+
     def draw_next_piece(self, *, random: bool=False, kill_switch: bool=OFF) -> None:
         """ Draw the next piece in right corner on display """
         if kill_switch: return
@@ -212,7 +216,7 @@ class Display:
 
     def draw_start(self) -> None:
         self.draw_text(Y=15)
-        self.draw_text(text=KEY_BINDS, X=30, Y=20, static=True)
+        self.draw_text(text=KEY_BINDS.format(__version__), X=30, Y=20, static=True)
 
     def draw_ready(self) -> None:
         self.draw_text(text=CHOOSE_LEVEL_BANNER_1, X=40, Y=35)
@@ -225,7 +229,7 @@ class Display:
     def draw_pause(self) -> None:
         self.draw_empty()
         self.draw_text(text='PAUSE\n-----', X=55, Y=15)
-        self.draw_text(text=KEY_BINDS, X=30, Y=20, static=True)
+        self.draw_text(text=KEY_BINDS.format(__version__), X=30, Y=20, static=True)
 
     def draw_game_over(self) -> None:
         self.draw_text(text='GAME OVER\n---------', X=47, Y=58)
@@ -234,7 +238,7 @@ class Display:
     def draw_end(self) -> None:
         self.draw_text(text=END_BANNER, X=47)
 
-    def draw_text(self, *, text: str="Pyxel Tetris", X: int=41, Y: int=60, static: bool=False, color: int=7) -> None:
+    def draw_text(self, *, text: str="Pyxel Tetris\n------------", X: int=41, Y: int=60, static: bool=False, color: int=7) -> None:
         if static: pyxel.text(X, Y, text, color)
         else: pyxel.text(X, Y, text, pyxel.frame_count % 16)
 
@@ -245,6 +249,7 @@ class Display:
 
     def piece_placer(self, piece: Piece) -> None:
         """ Piece is placing on piece.x + i & piece.y + j in display """
+        if piece.y < 0: return # This will help keep the pieces from appearing suddenly
         for i, row in enumerate(piece.current_rotation):
             for j, col in enumerate(row):
                 if col:
@@ -256,6 +261,7 @@ class Display:
 
     def piece_check_place(self, piece: Piece) -> bool:
         """ Check around of piece that wanna close to other pieces or walls or bottom """
+        if piece.y < 0: return True # This will help keep the pieces from appearing suddenly
         for i, row in enumerate(piece.current_rotation):
             for j, col in enumerate(row):
                 if col:
@@ -263,10 +269,8 @@ class Display:
                         I = j - 1 + rpixel8(piece.y) + 1
                         J = i - 3 + rpixel8(piece.x)
                         # Other pieces maybe fill loc_x + i and loc_y + j
-                        if self.__pesudo_display[I][J].fill:
-                            return False
-                    except IndexError:
-                        return False
+                        if self.__pesudo_display[I][J].fill: return False
+                    except IndexError: return False
         return True
 
     def check_rows(self) -> bool:
@@ -500,7 +504,8 @@ class Tetris:
 
                 case Game_state.END:
                     self.display.draw_end()
-
+            
+            self.display.draw_top_bar()
         except KeyboardInterrupt: ...
 
     def admit_piece(self) -> None:
@@ -512,10 +517,10 @@ class Tetris:
 
     def init_loc_piece(self) -> None:
         if self.current_piece.name == 'I':
-            self.current_piece.y = self.display.valid_h[0] - pixel8(1)
+            self.current_piece.y = self.display.valid_h[0] - pixel8(4)
             self.current_piece.x = pixel8(4 + (len(self.current_piece.current_rotation[0])) // 2)
         else:
-            self.current_piece.y = self.display.valid_h[0]
+            self.current_piece.y = self.display.valid_h[0] - pixel8(3)
             self.current_piece.x = pixel8(6 + (len(self.current_piece.current_rotation[0])) // 2)
 
     def move_piece(self) -> None:
