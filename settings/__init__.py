@@ -46,6 +46,8 @@ ENTER:
 
 BACKSpace:
 -GameOver
+
+     {}
 """
 CHOOSE_LEVEL_BANNER_1 = """
 Choose level
