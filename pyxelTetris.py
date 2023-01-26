@@ -249,7 +249,7 @@ class Display:
 
     def piece_placer(self, piece: Piece) -> None:
         """ Piece is placing on piece.x + i & piece.y + j in display """
-        if piece.y < 0: return # This will help keep the pieces from appearing suddenly
+        if piece.y <= 0: return # This will help keep the pieces from appearing suddenly
         for i, row in enumerate(piece.current_rotation):
             for j, col in enumerate(row):
                 if col:
@@ -261,7 +261,7 @@ class Display:
 
     def piece_check_place(self, piece: Piece) -> bool:
         """ Check around of piece that wanna close to other pieces or walls or bottom """
-        if piece.y < 0: return True # This will help keep the pieces from appearing suddenly
+        if piece.y <= 0: return True # This will help keep the pieces from appearing suddenly
         for i, row in enumerate(piece.current_rotation):
             for j, col in enumerate(row):
                 if col:
@@ -464,25 +464,24 @@ class Tetris:
 
                 case Game_state.RUNNING:
                     self.display.draw_next_piece(kill_switch=self.next_piece_flag)
-                    if not self.display.is_full:
-                        if not self.is_piece_placed:
-                            self.display.draw_piece(
-                                self.current_piece,
-                                self.current_piece.x,
-                                self.current_piece.y
-                            )
-                        else: # show blink animate when piece was placed
-                            self.display.draw_piece(
-                                self.current_piece,
-                                self.current_piece.x,
-                                self.current_piece.y,
-                                style=WHITE
-                            )
-                            self.force_update = YES
+                    # if not self.display.is_full:
+                    if not self.is_piece_placed:
+                        self.display.draw_piece(
+                            self.current_piece,
+                            self.current_piece.x,
+                            self.current_piece.y
+                        )
+                    else: # show blink animate when piece was placed
+                        self.display.draw_piece(
+                            self.current_piece,
+                            self.current_piece.x,
+                            self.current_piece.y,
+                            style=WHITE
+                        )
+                        self.force_update = YES
 
                 case Game_state.CLEAR:
-                    if self.is_tetris_moment:
-                        self.display.style = next(COLORS)
+                    if self.is_tetris_moment: self.display.style = next(COLORS)
                     self.display.draw_next_piece(kill_switch=self.next_piece_flag)
 
                 case Game_state.LEVELUP:
@@ -492,8 +491,7 @@ class Tetris:
                         self.current_piece.x,
                         self.current_piece.y
                     )
-                    if self.display.levelup_animate.do():
-                        self.is_level_up = YES
+                    if self.display.levelup_animate.do(): self.is_level_up = YES
                 
                 case Game_state.PAUSE:
                     self.display.draw_pause()
