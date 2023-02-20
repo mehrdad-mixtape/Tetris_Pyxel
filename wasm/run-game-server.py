@@ -2,7 +2,7 @@ import http.server, socketserver, sys, argparse
 
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        # self.path = '/run-game.html'
+        self.path = './pyxel-tetris.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 def main() -> None:
@@ -27,7 +27,9 @@ def main() -> None:
             2. Click On 'game.html'
             3. Wait For Minutes (depends on your internet-quality)
             Do You Wanna Help? Run This:
-                run-game-server --help
+                $ run-game-server-linux --help
+                $ run-game-server-windows.exe --help
+                $ python3 server.py --help
             Press Ctrl+C to Exit ..."""
         )
         httpd.serve_forever()
