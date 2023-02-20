@@ -11,7 +11,7 @@
 # TODO: Score board
 
 __repo__ = 'https://github.com/mehrdad-mixtape/Tetris_Pyxel'
-__version__ = 'v1.14.9'
+__version__ = 'v1.14.10'
 
 import pyxel, sys
 from enum import Enum
@@ -440,6 +440,7 @@ class Tetris:
 
     def draw(self) -> None:
         """ Draw frame """
+        pyxel.cls(0)
         try:
             self.display.draw(
                 state=self.current_state.value,
