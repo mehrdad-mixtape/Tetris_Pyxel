@@ -21,13 +21,13 @@
     ```bash
 	sudo apt install g++ build-essential libc6 libc6-dev
 	```
-1. Goto the `./bin/build/`
+1. Go to the `./bin/build/`
 2. Run `pyxelTetris`
 
 ### Directly:
 1. Install [pyxel](https://github.com/kitao/pyxel) version **1.9.7** 
     ```bash
-    pipx install pyxel==1.9.7
+    pip3 install pyxel==1.9.7
     ```
 2. Enjoy!
     - Run:
@@ -40,13 +40,30 @@
     ```
 ### WebAssembly: Help you to play game on every platform.
 - Notice!
-        1. **Chrome Browser** Is Best Choice For Phones
-        2. **FireFox Chrome Brave** Are Best Choice For LapTop Or PCs
+    1. **Chrome FireFox** Are Best Choice For Phones
+    2. **FireFox Chrome Brave** Are Best Choice For LapTop Or PCs
     - PCs:
         1. Go to `./wasm` directory
-        2. Run ***run-game-server-PLATFORM*** On Terminal Or Cmd Or PowerShell Or WSL Or etc ...
-        3. Open Your Browser & Go to URL --> http://ADDR:PORT & Click On ***game.html*** & Wait For Minutes
-        4. Game Will Be Start On Your Browser!
+        2. Connect your system to your local network
+            - Find IP-ADDRESS of your system
+                - Linux:
+                ```bash
+                $ ifconfig
+
+                OR
+
+                $ ip addr show
+                ```
+                - Windows:
+                ```bash
+                $ ipconfig
+                ```
+        3. Run ***run-game-server.py*** On Terminal Or Cmd Or PowerShell Or WSL Or etc ...
+            ```bash
+            $ python3 or python run-game-server.py --addr 192.168.x.x --port 8080
+            ```
+        4. Open Your Browser & Go to URL --> http://ADDR:8080 & Wait For Seconds
+        5. Game Will Be Start On Your Browser!
 
     - Phones: I Recommend **UserLand** (linux on android):
         1. Enable your ***data-network-connection*** and ***HotSpot*** network.
@@ -55,21 +72,21 @@
         ```bash
         sudo apt install curl git vim net-tools python3
         ```
-        4. Find you IP-ADDRESS (looking for **wlan** interface)
+        4. Find your IP-ADDRESS (looking for **wlan** interface)
         ```bash
         ifconfig
         [...]
         wlan1 [...] 192.168.x.x [...]
         [...]
-        ```
+
         OR
-        ```bash
+
         ip addr show
         [...]
         wlan1 [...] 192.168.x.x [...]
         [...]
         ```
-        5. Clone wy repo
+        5. Clone my repo
         ```bash
         git clone https://github.com/mehrdad-mixtape/Tetris_Pyxel
         ```
@@ -77,11 +94,11 @@
         ```bash
         cd Tetris_Pyxel/wasm/
         ```
-        7. Run the source code of run-game-server
+        7. Run the source code of **run-game-server.py**
         ```bash
-        python3 code/server.py --addr 192.168.x.x --port 8000
+        python3 run-game-server.py --addr 192.168.x.x --port 8080
         ```
-        8. Open Your ***Chrome Browser*** & Go to URL --> http://ADDR:PORT & Click On ***game.html*** & Wait For Minutes
+        8. Open Your ***Chrome Browser*** & Go to URL --> http://ADDR:8080 & Wait For Seconds
         9. Game Will Be Start On Your Browser!
 
 ## Issus:
