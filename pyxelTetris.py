@@ -123,7 +123,7 @@ class CountDown_animate(Remember):
 class Display:
     """ Display is part of main place that store pieces """
     __slots__ = 'tile_map', 'u', 'v', 'w', 'h', 'candidate_rows', 'valid_w', 'valid_h', \
-        '_main_style', '__pesudo_display', 'is_full', 'gameover_animate', 'levelup_animate', \
+        '_main_style', '_cache_piece', '__pesudo_display', 'is_full', 'gameover_animate', 'levelup_animate', \
         'countdown_animate'
     def __init__(self):
         self.tile_map = 0
@@ -135,6 +135,7 @@ class Display:
         self.valid_w: Tuple[int] = (pixel8(3), pixel8(12)) # (start, end)
         self.valid_h: Tuple[int] = (pixel8(1), pixel8(20)) # (start, end)
         self._main_style = CHESS
+        self._cache_piece = None
         # __pesudo_display have 21-rows & 10-cols
         self.__pesudo_display: List[List[Block]] = [
             [Block(style=self._main_style) for _ in range(10)] for _ in range(20)
@@ -203,13 +204,13 @@ class Display:
         """ Draw the next piece in right corner on display """
         if kill_switch: return
         if not random:
-            piece = queue_piece[0]
-        else:
-            piece = random_piece()
-        offset_x = len(piece.current_rotation)
-        offset_y = len(piece.current_rotation[0])
+            self._cache_piece = queue_piece[0]
+        elif pyxel.frame_count % 5 == 0:
+            self._cache_piece = random_piece()
+        offset_x = len(self._cache_piece.current_rotation)
+        offset_y = len(self._cache_piece.current_rotation[0])
         self.draw_piece(
-            piece,
+            self._cache_piece,
             pixel8(16 + (4 - offset_x) // 2),
             pixel8(4 + (4 - offset_y) // 2)
         )
@@ -347,13 +348,13 @@ class Tetris:
 
     def __call__(self):
         if FPS == 12:
-            pyxel.init(WIDTH, HEIGHT, display_scale=SCALE, title=GAME_NAME, fps=FPS)
-            pyxel.load("./assets/tetris.pyxres")
-            pyxel.mouse(True)
             pyxel.run(self.update, self.draw)
         else: print(f"Please Don\'t Change the FPS!, Set {FPS=}")
 
     def __enter__(self):
+        pyxel.init(WIDTH, HEIGHT, display_scale=SCALE, title=GAME_NAME, fps=FPS)
+        pyxel.load("./assets/tetris.pyxres")
+        pyxel.mouse(True)
         return self
 
     def __exit__(self, *handlers):
@@ -707,10 +708,10 @@ class Tetris:
                 case Game_state.GAMEOVER | Game_state.END:
                     self.new_game()
         
-        if pyxel.btnp(pyxel.KEY_M):
+        if pyxel.btnp(pyxel.KEY_M, hold=1):
             self.toggle_music()
 
-        if pyxel.btn(pyxel.KEY_BACKSPACE):
+        if pyxel.btnp(pyxel.KEY_BACKSPACE, hold=1):
             self.current_state = Game_state.GAMEOVER
 
         if self.current_state == Game_state.RUNNING:
@@ -733,10 +734,10 @@ class Tetris:
                     self.next_piece_flag = YES
                 pyxel.play(0, 4)
 
-            if pyxel.btn(pyxel.KEY_Z):
+            if pyxel.btnp(pyxel.KEY_Z, hold=1):
                 self.handle_rotate(Direction.RightTurn)
             
-            if pyxel.btn(pyxel.KEY_X):
+            if pyxel.btnp(pyxel.KEY_X, hold=1):
                 self.handle_rotate(Direction.LeftTurn)
 
     def check_input_mouse(self) -> None:
