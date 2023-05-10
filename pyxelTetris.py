@@ -207,13 +207,16 @@ class Display:
             self._cache_piece = queue_piece[0]
         elif pyxel.frame_count % 5 == 0:
             self._cache_piece = random_piece()
-        offset_x = len(self._cache_piece.current_rotation)
-        offset_y = len(self._cache_piece.current_rotation[0])
-        self.draw_piece(
-            self._cache_piece,
-            pixel8(16 + (4 - offset_x) // 2),
-            pixel8(4 + (4 - offset_y) // 2)
-        )
+        try:
+            offset_x = len(self._cache_piece.current_rotation)
+            offset_y = len(self._cache_piece.current_rotation[0])
+            self.draw_piece(
+                self._cache_piece,
+                pixel8(16 + (4 - offset_x) // 2),
+                pixel8(4 + (4 - offset_y) // 2)
+            )
+        except AttributeError:
+            ...
 
     def draw_start(self) -> None:
         self.draw_text(Y=15)
