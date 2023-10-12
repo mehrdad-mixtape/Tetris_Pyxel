@@ -25,7 +25,7 @@ def main() -> None:
             PyxelTetris Server Running on {ADDR}:{PORT}
             1. Open Your Browser And Go to URL: http://{ADDR}:{PORT}
             2. Wait For Minutes (depends on your internet-quality) And Game Will Be Start.
-            Do You Wanna Change {ADDR=} | {PORT=} ?
+            Do You Wanna Change {ADDR=} | {PORT=} | both?
                 $ python3 run_game_server.py --addr ADDR --port PORT
                 $ python3 run_game_server.py --addr ADDR
                 $ python3 run_game_server.py --port PORT
