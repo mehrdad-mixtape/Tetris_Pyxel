@@ -1,9 +1,9 @@
-import http.server, socketserver, sys, argparse
-
+from libs import *
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         self.path = './pyxel-tetris.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
 
 def main() -> None:
     Handler = MyHttpRequestHandler
@@ -32,6 +32,7 @@ def main() -> None:
             Press Ctrl+C to Exit ..."""
         )
         httpd.serve_forever()
+
 
 if __name__ == '__main__':
     try:
