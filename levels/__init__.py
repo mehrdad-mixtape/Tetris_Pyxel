@@ -1,41 +1,40 @@
-from typing import Tuple, List, Dict
-from piece import PINK, YELLOW, BLUE
+from libs import *
+from piece import PINK, YELLOW, GREEN, RED, WHITE_BLUE
 
+@dataclass(slots=True)
 class Level:
     """ Levels of game """
-    __slots__ = 'level_num', 'speed', 'line', 'color'
-    def __init__(self, level_num: int, speed: float, line: int, color: Tuple[int]):
-        self.level_num = level_num
-        self.speed = speed
-        self.line = line
-        self.color = color
-    
-    def __str__(self):
-        return f"{self.level_num=} {self.speed=} {self.line=} {self.color=}"
 
-Statics_level: Dict[int, Tuple[float, int, Tuple[int]]] = { # level_number: (speed, line, color)
-    0: (2.0, 15, YELLOW),
-    1: (2.5, 25, YELLOW),
-    2: (3.0, 35, YELLOW),
-    3: (3.5, 45, YELLOW),
-    4: (4.0, 55, YELLOW),
-    5: (4.5, 65, PINK),
-    6: (5.0, 75, PINK),
-    7: (5.5, 85, PINK),
-    8: (6.5, 95, PINK),
-    9: (7.5, 105, PINK),
-    10: (8.5, 115, BLUE),
-    11: (9.5, 125, BLUE),
-    12: (10.5, 135, BLUE),
-    13: (12.0, 145, BLUE),
-    14: (13.0, 160, BLUE),
-}
+    level_num: int
+    speed: float
+    line: int
+    color: Tuple[int]
+
+
 LEVELS: List[Level] = [
-    Level(
-        n,
-        Statics_level[n][0],
-        Statics_level[n][1],
-        Statics_level[n][2]
-    ) for n in range(len(Statics_level))
+    Level(0,    2.0,    15,     YELLOW),
+    Level(1,    2.5,    25,     YELLOW),
+    Level(2,    3.0,    35,     YELLOW),
+    Level(3,    3.5,    45,     YELLOW),
+    Level(4,    4.0,    55,     YELLOW),
+
+    Level(5,    5.0,    65,     PINK),
+    Level(6,    5.5,    75,     PINK),
+    Level(7,    6.0,    85,     PINK),
+    Level(8,    6.5,    95,     PINK),
+    Level(9,    7.0,    105,    PINK),
+
+    Level(10,   8.0,    120,    WHITE_BLUE),
+    Level(11,   8.5,    135,    WHITE_BLUE),
+    Level(12,   9.0,    150,    WHITE_BLUE),
+    Level(13,   9.5,    165,    WHITE_BLUE),
+    Level(14,   10.0,   180,    WHITE_BLUE),
+
+    Level(15,   12.0,   200,    GREEN),
+    Level(16,   13.0,   220,    GREEN),
+    Level(17,   14.0,   240,    GREEN),
+    Level(18,   15.0,   260,    GREEN),
+    Level(19,   16.0,   280,    GREEN),
+
+    Level(20,   18.0,   300,    RED),
 ]
-Statics_level.clear()
