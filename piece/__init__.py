@@ -1,10 +1,8 @@
-from typing import Any, Tuple, Union, List
-from collections import deque
-from itertools import cycle
-from enum import Enum
+from libs import *
+from settings import MAX_LEN_Q
 
 BLACK = (0, 0)
-DARK_BLUE = (96, 0)
+DARK_BLUE = (48, 24)
 PURPLE = (8, 24)
 DARK_GREEN = (24, 24)
 BROWN = (32, 24)
@@ -13,106 +11,65 @@ WHITE_BLUE = (40, 24)
 WHITE = (72, 16)
 RED = (0, 24)
 ORANGE = (48, 24)
-YELLOW = (32, 16)
-GREEN = (56, 24)
-MID_BLUE = (96, 8)
-GRAY = (64, 24)
-PINK = (24, 16)
-WHITE_PINK = (64, 32)
+YELLOW = (16, 32)
+GREEN = (0, 32)
+MID_BLUE = (48, 32)
+GRAY = (24, 32)
+PINK = (8, 32)
+WHITE_PINK = (32, 32)
 
-COLORS: cycle = cycle(
+COLORS = cycle(
     [
-        BLACK,
-        DARK_BLUE,
-        PURPLE,
-        DARK_GREEN,
-        BROWN,
-        BLUE,
-        WHITE_BLUE,
-        WHITE,
-        RED,
-        ORANGE,
-        YELLOW,
-        GREEN,
-        MID_BLUE,
-        GRAY,
-        PINK,
-        WHITE_PINK, 
+        BLACK, DARK_BLUE, PURPLE, DARK_GREEN,
+        BROWN, BLUE, WHITE_BLUE, WHITE,
+        RED, ORANGE, YELLOW, GREEN,
+        MID_BLUE, GRAY, PINK, WHITE_PINK, 
     ]
 )
 
 CYAN = (80, 0)
 CHESS = (104, 32)
 DEAD = (0, 16)
-CLEAR = (8, 16)
 STONE = (16, 16)
 
-class Direction(Enum):
-    RightTurn = 1
-    LeftTurn = -1
-
-class Cycle:
-    """ Cycle data structure """
-    __slots__ = '__index', '__cycle', '__len'
-    def __init__(self, *args):
-        self.__index = 0
-        self.__cycle: List[Any] = [*args]
-        self.__len = len(args)
-    
-    def __str__(self):
-        return f"Index={self.__index}, Len={self.__len}"
-    
-    def __len__(self):
-        return self.__len
-    
-    def nexT(self) -> Any:
-        if self.__index + 1 == self.__len:
-            self.__index = 0
-        else:
-            self.__index += 1
-        return self.__cycle[self.__index]
-    
-    def preV(self) -> Any:
-        if self.__index - 1 == -1:
-            self.__index = self.__len - 1
-        else:
-            self.__index -= 1
-        return self.__cycle[self.__index]
-
+@dataclass(slots=True)
 class Block:
     """ Display of Tetris filled with Blocks """
-    __slots__ = 'style', 'fill'
-    def __init__(self, style: Tuple[int]=YELLOW, fill: int=0):
-        self.style = style
-        self.fill = fill
 
+    style: Tuple[int] = YELLOW
+    fill: int = 0
+
+
+@dataclass(slots=True)
 class Base_piece:
     """ Father of All-Pieces, All rotations of pieces store on 'Cycle' data-structure """
-    __slots__ = 'limit_h', 'limit_w', 'x', 'y', 'limit_x', 'limit_y', \
-        'current_rotation', 'pool_piece', 'style', 'name'
-    def __init__(self):
-        self.limit_h = 0 # height of piece
-        self.limit_w = 0 # width of piece
-        self.x = 0 # current loc_x
-        self.y = 0 # current loc_y
-        self.limit_x = 0 # maximum loc_x value that the piece can have on Display.
-        self.limit_y = 0 # maximum loc_y value that the piece can have on Display.
-        self.current_rotation: Tuple[Tuple[str]] = None
-        self.pool_piece: Cycle = None # store all rotations of piece.
-        self.style: Tuple[int] = (0, 0)
+
+    limit_h: int = 0 # height of piece
+    limit_w: int = 0 # width of piece
+    x: int = 0 # current loc_x
+    y: int = 0 # current loc_y
+    limit_x: int = 0 # maximum loc_x value that the piece can have on Display.
+    limit_y: int = 0 # maximum loc_y value that the piece can have on Display.
+    current_rotation: Tuple[Tuple[str]] = None
+    pool_piece: Cycle = None # store all rotations of piece.
+    style: Tuple[int] = (0, 0)
+
 
     def rotate(self) -> None:
         self.current_rotation = self.pool_piece.nexT()
-    
+
+
     def rrotate(self) -> None:
         self.current_rotation = self.pool_piece.preV()
 
+
 class Piece_L(Base_piece):
     """ Piece L with 4 rotation """
+
     __slots__ = '_piece_01', '_piece_02', '_piece_03', '_piece_04'
+
     def __init__(self):
         super().__init__()
-        self.name = 'L'
         self.style = (8, 0)
         self._piece_01 = (
             (1, 1, 1,),
@@ -140,6 +97,7 @@ class Piece_L(Base_piece):
         )
         self.current_rotation = self._piece_01
 
+
     def __str__(self):
         return """
         Piece L:
@@ -150,12 +108,14 @@ class Piece_L(Base_piece):
         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         """
 
+
 class Piece_J(Base_piece):
     """ Piece J with 4 rotation """
+
     __slots__ = '_piece_11', '_piece_12', '_piece_13', '_piece_14'
+
     def __init__(self):
         super().__init__()
-        self.name = 'J'
         self.style = (24, 8)
         self._piece_11 = (
             (1, 0, 0,),
@@ -183,6 +143,7 @@ class Piece_J(Base_piece):
         )
         self.current_rotation = self._piece_11
 
+
     def __str__(self):
         return """
         Piece J:
@@ -193,12 +154,14 @@ class Piece_J(Base_piece):
         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         """
 
+
 class Piece_I(Base_piece):
     """ Piece I with 2 rotation """
+
     __slots__ = '_piece_21', '_piece_22', '_piece_23'
+
     def __init__(self):
         super().__init__()
-        self.name = 'I'
         self.style = (24, 0)
         self._piece_21 = (
             (0, 1, 0, 0,),
@@ -207,9 +170,7 @@ class Piece_I(Base_piece):
             (0, 1, 0, 0,),
         )
         self._piece_22 = (
-            # (0, 0, 0, 0,),
             (1, 1, 1, 1,),
-            # (0, 0, 0, 0,),
         )
         self._piece_23 = (
             (0, 0, 1, 0,),
@@ -225,6 +186,7 @@ class Piece_I(Base_piece):
         )
         self.current_rotation = self._piece_21
 
+
     def __str__(self):
         return """
         Piece I:
@@ -236,12 +198,14 @@ class Piece_I(Base_piece):
         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         """
 
+
 class Piece_S(Base_piece):
     """ Piece S with 2 rotation """
+
     __slots__ = '_piece_31', '_piece_32'
+
     def __init__(self):
         super().__init__()
-        self.name = 'S'
         self.style = (8, 8)
         self._piece_31 = (
             (1, 0,),
@@ -258,6 +222,7 @@ class Piece_S(Base_piece):
         )
         self.current_rotation = self._piece_31
 
+
     def __str__(self):
         return """
         Piece S:
@@ -268,12 +233,14 @@ class Piece_S(Base_piece):
         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         """
 
+
 class Piece_Z(Base_piece):
-    """ Piece Z with 2 rotation"""
+    """ Piece Z with 2 rotation """
+
     __slots__ = '_piece_41', '_piece_42'
+
     def __init__(self):
         super().__init__()
-        self.name = 'Z'
         self.style = (0, 8)
         self._piece_41 = (
             (0, 1,),
@@ -290,6 +257,7 @@ class Piece_Z(Base_piece):
         )
         self.current_rotation = self._piece_41
 
+
     def __str__(self):
         return """
         Piece Z:
@@ -300,12 +268,14 @@ class Piece_Z(Base_piece):
         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         """
 
+
 class Piece_T(Base_piece):
     """ Piece T with 4 rotation """
+
     __slots__ = '_piece_51', '_piece_52', '_piece_53', '_piece_54'
+
     def __init__(self):
         super().__init__()
-        self.name = 'T'
         self.style = (16, 0)
         self._piece_51 = (
             (0, 1, 0,),
@@ -333,6 +303,7 @@ class Piece_T(Base_piece):
         )
         self.current_rotation = self._piece_51
 
+
     def __str__(self):
         return """
         Piece T:
@@ -343,12 +314,14 @@ class Piece_T(Base_piece):
         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
         """
 
+
 class Piece_O(Base_piece):
     """ Piece O with 1 rotation """
+
     __slots__ = '_piece_61'
+
     def __init__(self):
         super().__init__()
-        self.name = 'O'
         self.style = (16, 8)
         self._piece_61 = (
             (1, 1,),
@@ -359,6 +332,7 @@ class Piece_O(Base_piece):
         )
         self.current_rotation = self._piece_61
 
+
     def __str__(self):
         return """
         Piece O:
@@ -368,14 +342,15 @@ class Piece_O(Base_piece):
         ▒▒▒▒▒▒▒▒
         """
 
+
 Piece = Union[Piece_L, Piece_J, Piece_I, Piece_S, Piece_Z, Piece_T, Piece_O]
-ALL_PIECES: List[Piece] = [
-    Piece_I,
-    Piece_L,
-    Piece_J,
-    Piece_S,
-    Piece_Z,
-    Piece_T,
-    Piece_O
-]
-queue_piece: List[Piece] = deque()
+
+ALL_PIECES: List[Piece] = [Piece_I, Piece_L, Piece_J, Piece_S, Piece_Z, Piece_T, Piece_O]
+
+queue_piece: deque[Piece] = deque(maxlen=MAX_LEN_Q)
+for _ in range(MAX_LEN_Q - 1):
+    random.shuffle(ALL_PIECES)
+    queue_piece.appendleft(
+        ALL_PIECES[
+            random.randint(100, 900) % len(ALL_PIECES)
+        ]())
