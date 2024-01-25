@@ -1,7 +1,11 @@
-from libs import *
+import sys
+import argparse
+import http.server
+import socketserver
+
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        self.path = './pyxel-tetris.html'
+        self.path = './pyxelTetris.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 

@@ -875,7 +875,7 @@ class Tetris:
                 self.handle_move_right()
 
             # Do piece close to left wall?
-            if pyxel.btn(pyxel.KEY_A):
+            if pyxel.btn(pyxel.KEY_LEFT):
                 self.handle_move_left()
             
             # Do piece close to bottom?
