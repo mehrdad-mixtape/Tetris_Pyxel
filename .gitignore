@@ -1,0 +1,7 @@
+.vscode
+env
+__pycache__
+bin
+*.html
+require*
+pyxel*
